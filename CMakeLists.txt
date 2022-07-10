@@ -24,10 +24,10 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
             "${CMAKE_CXX_COMPILER} -Q --help=warning | sed -e 's/^\\s*\\(\\-\\S*\\)\\s*\\[\\w*\\]/\\1 /gp;d' | tr -d '\\n'"
             OUTPUT_VARIABLE all_warnings)
 
-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wformat ${all_warnings} \
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wformat -Werror ${all_warnings} \
         -Wno-abi -Wno-system-headers -Wno-conversion -Wno-sign-conversion -Wno-double-promotion \
         -Wno-missing-declarations -Wno-switch-default -Wno-cast-align -Wno-float-conversion -Wno-float-equal \
-        -Wno-shadow -Wno-shadow=local -Wno-unused-macros -Wno-unused-parameter \
+        -Wno-shadow -Wno-shadow=local -Wno-unused-macros -Wno-unused-parameter -Wno-unused-function \
         -Wno-traditional -Wno-traditional-conversion -Wno-unsuffixed-float-constants -Wno-bad-function-cast")
 else()
     message(WARNING "Unknown compiler")
