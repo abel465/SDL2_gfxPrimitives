@@ -3298,7 +3298,7 @@ void gfxPrimitivesSetFont(const void *fontdata, Uint32 cw, Uint32 ch)
 	int i;
 
 	if ((fontdata) && (cw) && (ch)) {
-		currentFontdata = (unsigned char *)fontdata;
+		currentFontdata = (const unsigned char *)fontdata;
 		charWidth = cw;
 		charHeight = ch;
 	} else {
@@ -4788,9 +4788,9 @@ int aaFilledEllipseColor(SDL_Renderer * renderer, float cx, float cy, float rx, 
 
 static int _gfxPrimitivesCompareFloat2(const void *a, const void *b)
 {
-	float diff = *((float *)a + 1) - *((float *)b + 1) ;
+	float diff = *((const float *)a + 1) - *((const float *)b + 1) ;
 	if (diff != 0.0) return (diff > 0) - (diff < 0) ;
-	diff = *(float *)a - *(float *)b ;
+	diff = *(const float *)a - *(const float *)b ;
 	return (diff > 0) - (diff < 0) ;
 }
 

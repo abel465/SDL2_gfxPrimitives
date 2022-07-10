@@ -17,7 +17,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
             -Wno-sign-conversion -Wno-double-promotion -Wno-extra-semi-stmt -Wno-bad-function-cast -Wno-float-conversion
             -Wno-unused-parameter -Wno-conditional-uninitialized -Wno-documentation-html -Wno-cast-align
             -Wno-implicit-int-float-conversion -Wno-implicit-float-conversion -Wno-float-equal -Wno-shadow
-            -Wno-unused-macros -Wno-unused-function -Wno-cast-qual)
+            -Wno-unused-macros -Wno-unused-function)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     target_compile_options(${TARGET_NAME} PRIVATE)
     execute_process(COMMAND bash -c
@@ -28,8 +28,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         -Wno-abi -Wno-system-headers -Wno-conversion -Wno-sign-conversion -Wno-double-promotion \
         -Wno-missing-declarations -Wno-switch-default -Wno-cast-align -Wno-float-conversion -Wno-float-equal \
         -Wno-shadow -Wno-shadow=local -Wno-unused-macros -Wno-unused-parameter -Wno-missing-prototypes \
-        -Wno-traditional -Wno-traditional-conversion -Wno-unsuffixed-float-constants -Wno-bad-function-cast \
-        -Wno-cast-qual")
+        -Wno-traditional -Wno-traditional-conversion -Wno-unsuffixed-float-constants -Wno-bad-function-cast")
 else()
     message(WARNING "Unknown compiler")
 endif()
