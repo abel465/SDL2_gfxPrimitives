@@ -173,7 +173,7 @@ static int _shrinkSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int factorx,
 	} 
 	/* dst y loop */
 
-	return (0);
+	return 0;
 }
 
 /*! 
@@ -256,7 +256,7 @@ static int _shrinkSurfaceY(SDL_Surface * src, SDL_Surface * dst, int factorx, in
 	} 
 	/* end dst y loop */
 
-	return (0);
+	return 0;
 }
 
 /*! 
@@ -284,12 +284,12 @@ static int _zoomSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int flipx, int
 	/*
 	* Allocate memory for row/column increments 
 	*/
-	if ((sax = (int *) malloc((dst->w + 1) * sizeof(int))) == NULL) {
-		return (-1);
+	if ((sax = (int *) malloc((dst->w + 1) * sizeof(int))) == nullptr) {
+		return -1;
 	}
-	if ((say = (int *) malloc((dst->h + 1) * sizeof(int))) == NULL) {
+	if ((say = (int *) malloc((dst->h + 1) * sizeof(int))) == nullptr) {
 		free(sax);
-		return (-1);
+		return -1;
 	}
 
 	/*
@@ -489,7 +489,7 @@ static int _zoomSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int flipx, int
 	free(sax);
 	free(say);
 
-	return (0);
+	return 0;
 }
 
 /*! 
@@ -512,18 +512,18 @@ static int _zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fl
 	int x, y;
 	Uint32 *sax, *say, *csax, *csay;
 	int csx, csy;
-	Uint8 *sp, *dp, *csp ;
+	Uint8 *sp, *dp, *csp;
 	int dgap;
 
 	/*
 	* Allocate memory for row increments 
 	*/
-	if ((sax = (Uint32 *) malloc((dst->w + 1) * sizeof(Uint32))) == NULL) {
-		return (-1);
+	if ((sax = (Uint32 *) malloc((dst->w + 1) * sizeof(Uint32))) == nullptr) {
+		return -1;
 	}
-	if ((say = (Uint32 *) malloc((dst->h + 1) * sizeof(Uint32))) == NULL) {
+	if ((say = (Uint32 *) malloc((dst->h + 1) * sizeof(Uint32))) == nullptr) {
 		free(sax);
-		return (-1);
+		return -1;
 	}
 
 	/*
@@ -604,7 +604,7 @@ static int _zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fl
 	free(sax);
 	free(say);
 
-	return (0);
+	return 0;
 }
 
 /*! 
@@ -813,12 +813,12 @@ SDL_Surface* rotateSurface90Degrees(SDL_Surface* src, int numClockwiseTurns)
 	if (!src || 
 	    !src->format) {
 		SDL_SetError("NULL source surface or source surface format");
-	    return NULL; 
+	    return nullptr;
 	}
 
 	if ((src->format->BitsPerPixel % 8) != 0) {
 		SDL_SetError("Invalid source surface bit depth");
-	    return NULL; 
+	    return nullptr;
 	}
 
 	/* normalize numClockwiseTurns */
@@ -843,7 +843,7 @@ SDL_Surface* rotateSurface90Degrees(SDL_Surface* src, int numClockwiseTurns)
 		src->format->Amask);
 	if(!dst) {
 		SDL_SetError("Could not create destination surface"); 
-		return NULL;
+		return nullptr;
 	}
 
 	if (SDL_MUSTLOCK(src)) {
@@ -1067,8 +1067,8 @@ SDL_Surface *rotozoomSurfaceXY(SDL_Surface * src, double angle, double zoomx, do
 	/*
 	* Sanity check 
 	*/
-	if (src == NULL) {
-		return (NULL);
+	if (src == nullptr) {
+		return nullptr;
 	}
 
 	/*
@@ -1094,7 +1094,7 @@ SDL_Surface *rotozoomSurfaceXY(SDL_Surface * src, double angle, double zoomx, do
 #endif
 			);
 
-		SDL_BlitSurface(src, NULL, rz_src, NULL);
+		SDL_BlitSurface(src, nullptr, rz_src, nullptr);
 
 		src_converted = 1;
 		is32bit = 1;
@@ -1141,7 +1141,7 @@ SDL_Surface *rotozoomSurfaceXY(SDL_Surface * src, double angle, double zoomx, do
 		/*
 		* Alloc space to completely contain the rotated surface 
 		*/
-		rz_dst = NULL;
+		rz_dst = nullptr;
 		if (is32bit) {
 			/*
 			* Target surface is 32bit with source RGBA/ABGR ordering 
@@ -1158,8 +1158,8 @@ SDL_Surface *rotozoomSurfaceXY(SDL_Surface * src, double angle, double zoomx, do
 		}
 
 		/* Check target */
-		if (rz_dst == NULL)
-			return NULL;
+		if (rz_dst == nullptr)
+			return nullptr;
 
 		/* Adjust for guard rows */
 		rz_dst->h = dstheight;
@@ -1221,7 +1221,7 @@ SDL_Surface *rotozoomSurfaceXY(SDL_Surface * src, double angle, double zoomx, do
 		/*
 		* Alloc space to completely contain the zoomed surface 
 		*/
-		rz_dst = NULL;
+		rz_dst = nullptr;
 		if (is32bit) {
 			/*
 			* Target surface is 32bit with source RGBA/ABGR ordering 
@@ -1238,8 +1238,8 @@ SDL_Surface *rotozoomSurfaceXY(SDL_Surface * src, double angle, double zoomx, do
 		}
 
 		/* Check target */
-		if (rz_dst == NULL)
-			return NULL;
+		if (rz_dst == nullptr)
+			return nullptr;
 
 		/* Adjust for guard rows */
 		rz_dst->h = dstheight;
@@ -1293,7 +1293,7 @@ SDL_Surface *rotozoomSurfaceXY(SDL_Surface * src, double angle, double zoomx, do
 	/*
 	* Return destination surface 
 	*/
-	return (rz_dst);
+	return rz_dst;
 }
 
 /*!
@@ -1370,8 +1370,8 @@ SDL_Surface *zoomSurface(SDL_Surface * src, double zoomx, double zoomy, int smoo
 	/*
 	* Sanity check 
 	*/
-	if (src == NULL)
-		return (NULL);
+	if (src == nullptr)
+		return nullptr;
 
 	/*
 	* Determine if source surface is 32bit or 8bit 
@@ -1395,10 +1395,10 @@ SDL_Surface *zoomSurface(SDL_Surface * src, double zoomx, double zoomy, int smoo
 			0xff000000,  0x00ff0000, 0x0000ff00, 0x000000ff
 #endif
 			);
-		if (rz_src == NULL) {
-			return NULL;
+		if (rz_src == nullptr) {
+			return nullptr;
 		}
-		SDL_BlitSurface(src, NULL, rz_src, NULL);
+		SDL_BlitSurface(src, nullptr, rz_src, nullptr);
 		src_converted = 1;
 		is32bit = 1;
 	}
@@ -1414,7 +1414,7 @@ SDL_Surface *zoomSurface(SDL_Surface * src, double zoomx, double zoomy, int smoo
 	/*
 	* Alloc space to completely contain the zoomed surface 
 	*/
-	rz_dst = NULL;
+	rz_dst = nullptr;
 	if (is32bit) {
 		/*
 		* Target surface is 32bit with source RGBA/ABGR ordering 
@@ -1431,14 +1431,14 @@ SDL_Surface *zoomSurface(SDL_Surface * src, double zoomx, double zoomy, int smoo
 	}
 
 	/* Check target */
-	if (rz_dst == NULL) {
+	if (rz_dst == nullptr) {
 		/*
 		* Cleanup temp surface 
 		*/
 		if (src_converted) {
 			SDL_FreeSurface(rz_src);
 		}		
-		return NULL;
+		return nullptr;
 	}
 
 	/* Adjust for guard rows */
@@ -1489,7 +1489,7 @@ SDL_Surface *zoomSurface(SDL_Surface * src, double zoomx, double zoomy, int smoo
 	/*
 	* Return destination surface 
 	*/
-	return (rz_dst);
+	return rz_dst;
 }
 
 /*! 
@@ -1513,7 +1513,7 @@ SDL_Surface *shrinkSurface(SDL_Surface *src, int factorx, int factory)
 {
 	int result;
 	SDL_Surface *rz_src;
-	SDL_Surface *rz_dst = NULL;
+	SDL_Surface *rz_dst = nullptr;
 	int dstwidth, dstheight;
 	int is32bit;
 	int i, src_converted;
@@ -1522,8 +1522,8 @@ SDL_Surface *shrinkSurface(SDL_Surface *src, int factorx, int factory)
 	/*
 	* Sanity check 
 	*/
-	if (src == NULL) {
-		return (NULL);
+	if (src == nullptr) {
+		return nullptr;
 	}
 
 	/*
@@ -1547,12 +1547,12 @@ SDL_Surface *shrinkSurface(SDL_Surface *src, int factorx, int factory)
 			0xff000000,  0x00ff0000, 0x0000ff00, 0x000000ff
 #endif
 			);
-		if (rz_src==NULL) {
+		if (rz_src==nullptr) {
 			haveError = 1;
 			goto exitShrinkSurface;
 		}
 
-		SDL_BlitSurface(src, NULL, rz_src, NULL);
+		SDL_BlitSurface(src, nullptr, rz_src, nullptr);
 		src_converted = 1;
 		is32bit = 1;
 	}
@@ -1593,7 +1593,7 @@ SDL_Surface *shrinkSurface(SDL_Surface *src, int factorx, int factory)
 	}
 
 	/* Check target */
-	if (rz_dst == NULL) {
+	if (rz_dst == nullptr) {
 		haveError = 1;
 		goto exitShrinkSurface;
 	}
@@ -1609,7 +1609,7 @@ SDL_Surface *shrinkSurface(SDL_Surface *src, int factorx, int factory)
 		* Call the 32bit transformation routine to do the shrinking (using alpha) 
 		*/
 		result = _shrinkSurfaceRGBA(rz_src, rz_dst, factorx, factory);		
-		if ((result!=0) || (rz_dst==NULL)) {
+		if ((result!=0) || (rz_dst==nullptr)) {
 			haveError = 1;
 			goto exitShrinkSurface;
 		}
@@ -1632,7 +1632,7 @@ SDL_Surface *shrinkSurface(SDL_Surface *src, int factorx, int factory)
 	}
 
 exitShrinkSurface:
-	if (rz_src!=NULL) {
+	if (rz_src!=nullptr) {
 		/*
 		* Unlock source surface 
 		*/
@@ -1650,14 +1650,14 @@ exitShrinkSurface:
 
 	/* Check error state; maybe need to cleanup destination */
 	if (haveError==1) {
-		if (rz_dst!=NULL) {
+		if (rz_dst!=nullptr) {
 			SDL_FreeSurface(rz_dst);
 		}
-		rz_dst=NULL;
+		rz_dst=nullptr;
 	} 
 
 	/*
 	* Return destination surface 
 	*/
-	return (rz_dst);
+	return rz_dst;
 }

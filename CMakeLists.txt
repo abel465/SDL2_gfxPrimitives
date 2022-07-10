@@ -18,7 +18,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
             -Wno-bad-function-cast -Wno-float-conversion -Wno-unused-parameter -Wno-conditional-uninitialized
             -Wno-documentation-html -Wno-cast-align -Wno-implicit-int-float-conversion -Wno-implicit-float-conversion
             -Wno-float-equal -Wno-shadow -Wno-unused-macros -Wno-unused-function
-            -Wno-old-style-cast -Wno-zero-as-null-pointer-constant)
+            -Wno-old-style-cast -Wno-c++98-compat)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     target_compile_options(${TARGET_NAME} PRIVATE)
     execute_process(COMMAND bash -c
