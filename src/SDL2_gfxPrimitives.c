@@ -3236,7 +3236,7 @@ int texturedPolygon(SDL_Renderer *renderer, const Sint16 * vx, const Sint16 * vy
 /*!
 \brief Global cache for NxM pixel font textures created at runtime.
 */
-static SDL_Texture *gfxPrimitivesFont[256];
+static SDL_Texture *gfxPrimitivesFont[GFX_FONTDATALENGTH];
 
 /*!
 \brief Pointer to the current font data. Default is a 8x8 pixel internal font. 
@@ -3323,7 +3323,7 @@ void gfxPrimitivesSetFont(const void *fontdata, Uint32 cw, Uint32 ch)
 	}
 
 	/* Clear character cache */
-	for (i = 0; i < 256; i++) {
+	for (i = 0; i < GFX_FONTDATALENGTH; i++) {
 		if (gfxPrimitivesFont[i]) {
 			SDL_DestroyTexture(gfxPrimitivesFont[i]);
 			gfxPrimitivesFont[i] = NULL;
@@ -3367,7 +3367,7 @@ void gfxPrimitivesSetFontRotation(Uint32 rotation)
 		}
 
 		/* Clear character cache */
-		for (i = 0; i < 256; i++) {
+		for (i = 0; i < GFX_FONTDATALENGTH; i++) {
 			if (gfxPrimitivesFont[i]) {
 				SDL_DestroyTexture(gfxPrimitivesFont[i]);
 				gfxPrimitivesFont[i] = NULL;
@@ -3383,7 +3383,7 @@ void gfxPrimitivesSetFontZoom(Uint32 zoomx, Uint32 zoomy)
 	charZoomX = zoomx ;
 	charZoomY = zoomy ;
 	/* Clear character cache */
-	for (i = 0; i < 256; i++) {
+	for (i = 0; i < GFX_FONTDATALENGTH; i++) {
 		if (gfxPrimitivesFont[i]) {
 			SDL_DestroyTexture(gfxPrimitivesFont[i]);
 			gfxPrimitivesFont[i] = NULL;
