@@ -14,7 +14,7 @@ add_library(${TARGET_NAME} src/SDL2_gfxPrimitives.c include/SDL2_gfxPrimitives.h
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     target_compile_options(${TARGET_NAME} PRIVATE -Weverything -Werror
             -Wno-reserved-identifier -Wno-reserved-macro-identifier -Wno-implicit-int-conversion -Wno-missing-prototypes
-            -Wno-sign-conversion -Wno-double-promotion -Wno-extra-semi-stmt -Wno-bad-function-cast -Wno-float-conversion
+            -Wno-sign-conversion -Wno-double-promotion -Wno-bad-function-cast -Wno-float-conversion
             -Wno-unused-parameter -Wno-conditional-uninitialized -Wno-documentation-html -Wno-cast-align
             -Wno-implicit-int-float-conversion -Wno-implicit-float-conversion -Wno-float-equal -Wno-shadow
             -Wno-unused-macros -Wno-unused-function)

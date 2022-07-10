@@ -147,7 +147,7 @@ int pixelRGBAWeight(SDL_Renderer * renderer, Sint16 x, Sint16 y, Uint8 r, Uint8 
 */
 int hline(SDL_Renderer * renderer, Sint16 x1, Sint16 x2, Sint16 y)
 {
-	return SDL_RenderDrawLine(renderer, x1, y, x2, y);;
+	return SDL_RenderDrawLine(renderer, x1, y, x2, y);
 }
 
 
@@ -205,7 +205,7 @@ int hlineRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 x2, Sint16 y, Uint8 r, 
 */
 int vline(SDL_Renderer * renderer, Sint16 x, Sint16 y1, Sint16 y2)
 {
-	return SDL_RenderDrawLine(renderer, x, y1, x, y2);;
+	return SDL_RenderDrawLine(renderer, x, y1, x, y2);
 }
 
 /*!
