@@ -60,7 +60,7 @@ typedef struct {
 
 \returns Returns 0 on success, -1 on failure.
 */
-int pixel(SDL_Renderer *renderer, Sint16 x, Sint16 y)
+static int pixel(SDL_Renderer *renderer, Sint16 x, Sint16 y)
 {
 	return SDL_RenderDrawPoint(renderer, x, y);
 }
@@ -117,7 +117,7 @@ int pixelRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Uint8 r, Uint8 g, Uin
 
 \returns Returns 0 on success, -1 on failure.
 */
-int pixelRGBAWeight(SDL_Renderer * renderer, Sint16 x, Sint16 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a, Uint32 weight)
+static int pixelRGBAWeight(SDL_Renderer * renderer, Sint16 x, Sint16 y, Uint8 r, Uint8 g, Uint8 b, Uint8 a, Uint32 weight)
 {
 	/*
 	* Modify Alpha by weight 
@@ -145,7 +145,7 @@ int pixelRGBAWeight(SDL_Renderer * renderer, Sint16 x, Sint16 y, Uint8 r, Uint8 
 
 \returns Returns 0 on success, -1 on failure.
 */
-int hline(SDL_Renderer * renderer, Sint16 x1, Sint16 x2, Sint16 y)
+static int hline(SDL_Renderer * renderer, Sint16 x1, Sint16 x2, Sint16 y)
 {
 	return SDL_RenderDrawLine(renderer, x1, y, x2, y);
 }
@@ -203,7 +203,7 @@ int hlineRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 x2, Sint16 y, Uint8 r, 
 
 \returns Returns 0 on success, -1 on failure.
 */
-int vline(SDL_Renderer * renderer, Sint16 x, Sint16 y1, Sint16 y2)
+static int vline(SDL_Renderer * renderer, Sint16 x, Sint16 y1, Sint16 y2)
 {
 	return SDL_RenderDrawLine(renderer, x, y1, x, y2);
 }
@@ -788,7 +788,7 @@ int boxRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2,
 
 \returns Returns 0 on success, -1 on failure.
 */
-int line(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2)
+static int line(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2)
 {
 	/*
 	* Draw
@@ -869,7 +869,7 @@ with alpha<255.
 
 \returns Returns 0 on success, -1 on failure.
 */
-int _aalineRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, int draw_endpoint)
+static int _aalineRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, int draw_endpoint)
 {
 	Sint32 xx0, yy0, xx1, yy1;
 	int result;
@@ -2095,7 +2095,7 @@ Note: Determines vertex array and uses polygon or filledPolygon drawing routines
 \returns Returns 0 on success, -1 on failure.
 */
 /* TODO: rewrite algorithm; pie is not always accurate */
-int _pieRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end,  Uint8 r, Uint8 g, Uint8 b, Uint8 a, Uint8 filled)
+static int _pieRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end,  Uint8 r, Uint8 g, Uint8 b, Uint8 a, Uint8 filled)
 {
 	int result;
 	double angle, start_angle, end_angle;
@@ -2509,7 +2509,7 @@ int polygonColor(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, 
 
 \returns Returns 0 on success, -1 on failure.
 */
-int polygon(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, int n)
+static int polygon(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, int n)
 {
 	/*
 	* Draw 
@@ -2705,7 +2705,7 @@ int aapolygonRGBA(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy,
 
 \returns Returns 0 if a==b, a negative number if a<b or a positive number if a>b.
 */
-int _gfxPrimitivesCompareInt(const void *a, const void *b)
+static int _gfxPrimitivesCompareInt(const void *a, const void *b)
 {
 	return (*(const int *) a) - (*(const int *) b);
 }
@@ -2742,7 +2742,7 @@ Note: The last two parameters are optional; but are required for multithreaded o
 
 \returns Returns 0 on success, -1 on failure.
 */
-int filledPolygonRGBAMT(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, int n, Uint8 r, Uint8 g, Uint8 b, Uint8 a, int **polyInts, int *polyAllocated)
+static int filledPolygonRGBAMT(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, int n, Uint8 r, Uint8 g, Uint8 b, Uint8 a, int **polyInts, int *polyAllocated)
 {
 	int result;
 	int i;
@@ -2952,7 +2952,7 @@ int filledPolygonRGBA(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 *
 
 \returns Returns 0 on success, -1 on failure.
 */
-int _HLineTextured(SDL_Renderer *renderer, Sint16 x1, Sint16 x2, Sint16 y, SDL_Texture *texture, int texture_w, int texture_h, int texture_dx, int texture_dy)
+static int _HLineTextured(SDL_Renderer *renderer, Sint16 x1, Sint16 x2, Sint16 y, SDL_Texture *texture, int texture_w, int texture_h, int texture_dx, int texture_dy)
 {
 	Sint16 w;
 	Sint16 xtmp;
@@ -3051,7 +3051,7 @@ to the left and want the texture to apear the same you need to increase the text
 
 \returns Returns 0 on success, -1 on failure.
 */
-int texturedPolygonMT(SDL_Renderer *renderer, const Sint16 * vx, const Sint16 * vy, int n, 
+static int texturedPolygonMT(SDL_Renderer *renderer, const Sint16 * vx, const Sint16 * vy, int n,
 	SDL_Surface * texture, int texture_dx, int texture_dy, int **polyInts, int *polyAllocated)
 {
 	int result;
@@ -3331,7 +3331,7 @@ void gfxPrimitivesSetFont(const void *fontdata, Uint32 cw, Uint32 ch)
 	}
 }
 
-const void *gfxPrimitivesGetFont(void)
+static const void *gfxPrimitivesGetFont(void)
 {
 	return currentFontdata;
 }
@@ -3786,7 +3786,7 @@ plot(b.x, b.y);
 
 \returns Returns 0 on success, -1 on failure.
 */
-int _bresenhamInitialize(SDL2_gfxBresenhamIterator *b, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2)
+static int _bresenhamInitialize(SDL2_gfxBresenhamIterator *b, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2)
 {
 	int temp;
 
@@ -3848,7 +3848,7 @@ Maybe updates the x and y coordinates of the iterator struct.
 
 \returns Returns 0 on success, 1 if last point was reached, 2 if moving past end-of-line, -1 on failure.
 */
-int _bresenhamIterate(SDL2_gfxBresenhamIterator *b)
+static int _bresenhamIterate(SDL2_gfxBresenhamIterator *b)
 {	
 	if (b==NULL) {
 		return (-1);
@@ -4114,7 +4114,7 @@ static void y_varthick_line
  *                                                                     *
  ***********************************************************************/
 
-void draw_varthick_line(SDL_Renderer *B, int style,
+static void draw_varthick_line(SDL_Renderer *B, int style,
        int x0,int y0,int x1, int y1, double thickness)
 {
   int dx,dy,xstep,ystep;
@@ -4174,7 +4174,7 @@ int thickLineColor(SDL_Renderer *renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint
 	return thickLineRGBA(renderer, x1, y1, x2, y2, width, c[0], c[1], c[2], c[3]);
 }
 
-int thickLineColorStyle(SDL_Renderer *renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2,
+static int thickLineColorStyle(SDL_Renderer *renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2,
                         Uint8 width, Uint32 color, int style)
 {	
 	Uint8 *c = (Uint8 *)&color; 
@@ -4230,7 +4230,7 @@ int thickLineRGBA(SDL_Renderer *renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint1
 	return(result);
 }
 
-int RedefineChar(SDL_Renderer *renderer, char c, unsigned char *charpos, Uint32 width, Uint32 height)
+static int RedefineChar(SDL_Renderer *renderer, char c, unsigned char *charpos, Uint32 width, Uint32 height)
 {
 	Uint32 ix, iy;
 	Uint8 *curpos;

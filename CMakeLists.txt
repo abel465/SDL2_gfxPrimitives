@@ -13,7 +13,7 @@ add_library(${TARGET_NAME} src/SDL2_gfxPrimitives.c include/SDL2_gfxPrimitives.h
 # Blacklist method for warnings
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     target_compile_options(${TARGET_NAME} PRIVATE -Weverything -Werror
-            -Wno-reserved-identifier -Wno-reserved-macro-identifier -Wno-implicit-int-conversion -Wno-missing-prototypes
+            -Wno-reserved-identifier -Wno-reserved-macro-identifier -Wno-implicit-int-conversion
             -Wno-sign-conversion -Wno-double-promotion -Wno-bad-function-cast -Wno-float-conversion
             -Wno-unused-parameter -Wno-conditional-uninitialized -Wno-documentation-html -Wno-cast-align
             -Wno-implicit-int-float-conversion -Wno-implicit-float-conversion -Wno-float-equal -Wno-shadow
@@ -27,7 +27,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wformat ${all_warnings} \
         -Wno-abi -Wno-system-headers -Wno-conversion -Wno-sign-conversion -Wno-double-promotion \
         -Wno-missing-declarations -Wno-switch-default -Wno-cast-align -Wno-float-conversion -Wno-float-equal \
-        -Wno-shadow -Wno-shadow=local -Wno-unused-macros -Wno-unused-parameter -Wno-missing-prototypes \
+        -Wno-shadow -Wno-shadow=local -Wno-unused-macros -Wno-unused-parameter \
         -Wno-traditional -Wno-traditional-conversion -Wno-unsuffixed-float-constants -Wno-bad-function-cast")
 else()
     message(WARNING "Unknown compiler")
