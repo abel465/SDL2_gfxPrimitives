@@ -34,9 +34,9 @@ Richard Russell -- richard at rtrussell dot co dot uk
 #include <math.h>
 #include <string.h>
 
-#include "SDL2_gfxPrimitives.h"
-#include "SDL2_rotozoom.h"
-#include "SDL2_gfxPrimitives_font.h"
+#include "SDL2_gfxPrimitives.hpp"
+#include "SDL2_rotozoom.hpp"
+#include "SDL2_gfxPrimitives_font.hpp"
 
 /* ---- Structures */
 
