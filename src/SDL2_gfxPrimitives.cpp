@@ -31,10 +31,6 @@ Abel Svoboda -- abel465 at gmail dot com
 
 */
 
-#include <cstdio>
-#include <cstdlib>
-#include <cmath>
-#include <cstring>
 #include <bit>
 #include <numbers>
 #include <algorithm>

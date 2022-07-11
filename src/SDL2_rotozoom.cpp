@@ -33,8 +33,6 @@ Abel Svoboda -- abel465 at gmail dot com
 #include <windows.h>
 #endif
 
-#include <cstdlib>
-#include <cstring>
 #include <bit>
 #include <numbers>
 
