@@ -38,9 +38,9 @@ Abel Svoboda -- abel465 at gmail dot com
 #include <bit>
 #include <numbers>
 
-#include "SDL2_gfxPrimitives.hpp"
-#include "SDL2_rotozoom.hpp"
-#include "SDL2_gfxPrimitives_font.hpp"
+#include "SDL2_gfxPrimitives.h"
+#include "SDL2_rotozoom.h"
+#include "SDL2_gfxPrimitives_font.h"
 
 using std::numbers::pi;
 

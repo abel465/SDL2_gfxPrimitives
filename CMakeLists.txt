@@ -8,8 +8,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include_directories(include)
 
 set(TARGET_NAME "SDL2_gfxPrimitives")
-add_library(${TARGET_NAME} src/SDL2_gfxPrimitives.cpp include/SDL2_gfxPrimitives.hpp
-        src/SDL2_rotozoom.cpp include/SDL2_rotozoom.hpp include/SDL2_gfxPrimitives_font.hpp)
+add_library(${TARGET_NAME} src/SDL2_gfxPrimitives.cpp include/SDL2_gfxPrimitives.h
+        src/SDL2_rotozoom.cpp include/SDL2_rotozoom.h include/SDL2_gfxPrimitives_font.h)
 
 # Blacklist method for warnings
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")

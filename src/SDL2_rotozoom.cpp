@@ -38,7 +38,7 @@ Abel Svoboda -- abel465 at gmail dot com
 #include <bit>
 #include <numbers>
 
-#include "SDL2_rotozoom.hpp"
+#include "SDL2_rotozoom.h"
 
 using std::numbers::pi;
 
