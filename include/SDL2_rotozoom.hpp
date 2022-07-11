@@ -3,6 +3,7 @@
 SDL2_rotozoom.c: rotozoomer, zoomer and shrinker for 32bit or 8bit surfaces
 
 Copyright (C) 2001-2012  Andreas Schiffler
+Modifications and additions 2022 Abel Svoboda
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -24,21 +25,18 @@ misrepresented as being the original software.
 distribution.
 
 Andreas Schiffler -- aschiffler at ferzkopp dot net
+Abel Svoboda -- abel465 at gmail dot com
 
 */
 
-#ifndef _SDL2_rotozoom_h
-#define _SDL2_rotozoom_h
+#ifndef SDL2_rotozoom_h
+#define SDL2_rotozoom_h
 
-#include <math.h>
+//#include <math.h>
 
 /* Set up for C function definitions, even when using C++ */
 #ifdef __cplusplus
 extern "C" {
-#endif
-
-#ifndef M_PI
-#define M_PI	3.1415926535897932384626433832795
 #endif
 
 #include "SDL2/SDL.h"
@@ -86,7 +84,7 @@ extern "C" {
 		int *dstheight);
 
 	SDL2_ROTOZOOM_SCOPE void rotozoomSurfaceSizeXY
-		(int width, int height, double angle, double zoomx, double zoomy, 
+		(int width, int height, double angle, double zoomx, double zoomy,
 		int *dstwidth, int *dstheight);
 
 	/* 
@@ -120,4 +118,4 @@ extern "C" {
 }
 #endif
 
-#endif				/* _SDL2_rotozoom_h */
+#endif // SDL2_rotozoom_h

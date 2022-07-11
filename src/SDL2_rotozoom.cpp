@@ -61,17 +61,17 @@ struct tColorY {
 	Uint8 y;
 };
 
-///*!
-//\brief Returns the given value. Base case.
-//*/
+/*!
+\brief Returns the given value. Base case.
+*/
 template <typename T>
 constexpr T maxn(T&& v) {
     return std::forward<T>(v);
 }
 
-///*!
-//\brief Returns maximum of n values.
-//*/
+/*!
+\brief Returns the maximum of the given values.
+*/
 template <typename T0, typename T1, typename... Ts>
 constexpr std::common_type_t<T0, T1, Ts...> maxn(T0&& v0, T1&& v1, Ts&&... vs) noexcept {
     return v0 > v1
@@ -101,7 +101,7 @@ to a situation where the program can segfault.
 */
 static Uint32 _colorkey(SDL_Surface *src)
 {
-	Uint32 key = 0; 
+	Uint32 key;
 	SDL_GetColorKey(src, &key);
 	return key;
 }

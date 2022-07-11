@@ -4,6 +4,7 @@ SDL2_gfxPrimitives.h: graphics primitives for SDL
 
 Copyright (C) 2012-2014  Andreas Schiffler
 Additions for BBC BASIC (C) 2016-2020 Richard Russell
+Modifications and additions 2022 Abel Svoboda
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -26,16 +27,12 @@ distribution.
 
 Andreas Schiffler -- aschiffler at ferzkopp dot net
 Richard Russell -- richard at rtrussell dot co dot uk
+Abel Svoboda -- abel465 at gmail dot com
 
 */
 
-#ifndef _SDL2_gfxPrimitives_h
-#define _SDL2_gfxPrimitives_h
-
-#include <math.h>
-#ifndef M_PI
-#define M_PI	3.1415926535897932384626433832795
-#endif
+#ifndef SDL2_gfxPrimitives_h
+#define SDL2_gfxPrimitives_h
 
 #include "SDL2/SDL.h"
 
@@ -270,4 +267,4 @@ extern "C" {
 }
 #endif
 
-#endif				/* _SDL2_gfxPrimitives_h */
+#endif // SDL2_gfxPrimitives_h
