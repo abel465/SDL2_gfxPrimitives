@@ -1,8 +1,9 @@
 /*  
 
-SDL2_rotozoom.c: rotozoomer, zoomer and shrinker for 32bit or 8bit surfaces
+SDL2_rotozoom.cpp: rotozoomer, zoomer and shrinker for 32bit or 8bit surfaces
 
 Copyright (C) 2012  Andreas Schiffler
+Modifications and additions 2022 Abel Svoboda
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
@@ -24,6 +25,7 @@ misrepresented as being the original software.
 distribution.
 
 Andreas Schiffler -- aschiffler at ferzkopp dot net
+Abel Svoboda -- abel465 at gmail dot com
 
 */
 
@@ -962,8 +964,8 @@ static void _rotozoomSurfaceSizeTrig(int width, int height, double angle, double
 	* Determine destination width and height by rotating a centered source box 
 	*/
 	radangle = angle * (M_PI / 180.0);
-	*sanglezoom = sin(radangle);
-	*canglezoom = cos(radangle);
+	*sanglezoom = std::sin(radangle);
+	*canglezoom = std::cos(radangle);
 	*sanglezoom *= zoomx;
 	*canglezoom *= zoomx;
 	x = static_cast<double>(width / 2);
@@ -973,8 +975,8 @@ static void _rotozoomSurfaceSizeTrig(int width, int height, double angle, double
 	sx = *sanglezoom * x;
 	sy = *sanglezoom * y;
 
-	dstwidthhalf = MAX(static_cast<int>(ceil(MAX(MAX(MAX(fabs(cx + sy), fabs(cx - sy)), fabs(-cx + sy)), fabs(-cx - sy)))), 1);
-	dstheighthalf = MAX(static_cast<int>(ceil(MAX(MAX(MAX(fabs(sx + cy), fabs(sx - cy)), fabs(-sx + cy)), fabs(-sx - cy)))), 1);
+	dstwidthhalf = MAX(static_cast<int>(std::ceil(MAX(MAX(MAX(std::fabs(cx + sy), std::fabs(cx - sy)), std::fabs(-cx + sy)), std::fabs(-cx - sy)))), 1);
+	dstheighthalf = MAX(static_cast<int>(std::ceil(MAX(MAX(MAX(std::fabs(sx + cy), std::fabs(sx - cy)), std::fabs(-sx + cy)), std::fabs(-sx - cy)))), 1);
 	*dstwidth = 2 * dstwidthhalf;
 	*dstheight = 2 * dstheighthalf;
 }
@@ -1111,7 +1113,7 @@ SDL_Surface *rotozoomSurfaceXY(SDL_Surface * src, double angle, double zoomx, do
 	/*
 	* Check if we have a rotozoom or just a zoom 
 	*/
-	if (fabs(angle) > VALUE_LIMIT) {
+	if (std::fabs(angle) > VALUE_LIMIT) {
 
 		/*
 		* Angle!=0: full rotozoom 
@@ -1328,8 +1330,8 @@ void zoomSurfaceSize(int width, int height, double zoomx, double zoomy, int *dst
 	/*
 	* Calculate target size 
 	*/
-	*dstwidth = static_cast<int>(floor((static_cast<double>(width) * zoomx) + 0.5));
-	*dstheight = static_cast<int>(floor((static_cast<double>(height) * zoomy) + 0.5));
+	*dstwidth = static_cast<int>(std::floor((static_cast<double>(width) * zoomx) + 0.5));
+	*dstheight = static_cast<int>(std::floor((static_cast<double>(height) * zoomy) + 0.5));
 	if (*dstwidth < 1) {
 		*dstwidth = 1;
 	}
