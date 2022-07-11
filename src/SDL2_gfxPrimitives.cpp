@@ -29,10 +29,11 @@ Richard Russell -- richard at rtrussell dot co dot uk
 
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
+#include <cstring>
+#include <bit>
 
 #include "SDL2_gfxPrimitives.hpp"
 #include "SDL2_rotozoom.hpp"
@@ -77,7 +78,7 @@ static int pixel(SDL_Renderer *renderer, Sint16 x, Sint16 y)
 */
 int pixelColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return pixelRGBA(renderer, x, y, c[0], c[1], c[2], c[3]);
 }
 
@@ -127,7 +128,7 @@ static int pixelRGBAWeight(SDL_Renderer * renderer, Sint16 x, Sint16 y, Uint8 r,
 	if (ax > 255) {
 		a = 255;
 	} else {
-		a = (Uint8)(ax & 0x000000ff);
+		a = static_cast<Uint8>(ax & 0x000000ff);
 	}
 
 	return pixelRGBA(renderer, x, y, r, g, b, a);
@@ -164,7 +165,7 @@ static int hline(SDL_Renderer * renderer, Sint16 x1, Sint16 x2, Sint16 y)
 */
 int hlineColor(SDL_Renderer * renderer, Sint16 x1, Sint16 x2, Sint16 y, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return hlineRGBA(renderer, x1, x2, y, c[0], c[1], c[2], c[3]);
 }
 
@@ -221,7 +222,7 @@ static int vline(SDL_Renderer * renderer, Sint16 x, Sint16 y1, Sint16 y2)
 */
 int vlineColor(SDL_Renderer * renderer, Sint16 x, Sint16 y1, Sint16 y2, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return vlineRGBA(renderer, x, y1, y2, c[0], c[1], c[2], c[3]);
 }
 
@@ -264,7 +265,7 @@ int vlineRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y1, Sint16 y2, Uint8 r, 
 */
 int rectangleColor(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return rectangleRGBA(renderer, x1, y1, x2, y2, c[0], c[1], c[2], c[3]);
 }
 
@@ -357,7 +358,7 @@ int rectangleRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint
 */
 int roundedRectangleColor(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 rad, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return roundedRectangleRGBA(renderer, x1, y1, x2, y2, rad, c[0], c[1], c[2], c[3]);
 }
 
@@ -502,7 +503,7 @@ int roundedRectangleRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x
 */
 int roundedBoxColor(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 rad, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return roundedBoxRGBA(renderer, x1, y1, x2, y2, rad, c[0], c[1], c[2], c[3]);
 }
 
@@ -529,8 +530,8 @@ int roundedBoxRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2,
 	Sint16 w, h, r2, tmp;
 	Sint16 cx = 0;
 	Sint16 cy = rad;
-	Sint16 ocx = (Sint16) 0xffff;
-	Sint16 ocy = (Sint16) 0xffff;
+	Sint16 ocx = static_cast<Sint16>(0xffff);
+	Sint16 ocy = static_cast<Sint16>(0xffff);
 	Sint16 df = 1 - rad;
 	Sint16 d_e = 3;
 	Sint16 d_se = -2 * rad + 5;
@@ -699,7 +700,7 @@ int roundedBoxRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2,
 */
 int boxColor(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return boxRGBA(renderer, x1, y1, x2, y2, c[0], c[1], c[2], c[3]);
 }
 
@@ -810,7 +811,7 @@ static int line(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16
 */
 int lineColor(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return lineRGBA(renderer, x1, y1, x2, y2, c[0], c[1], c[2], c[3]);
 }
 
@@ -1080,7 +1081,7 @@ static int _aalineRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2,
 */
 int aalineColor(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return _aalineRGBA(renderer, x1, y1, x2, y2, c[0], c[1], c[2], c[3], 1);
 }
 
@@ -1119,7 +1120,7 @@ int aalineRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 
 */
 int circleColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return ellipseRGBA(renderer, x, y, rad, rad, c[0], c[1], c[2], c[3]);
 }
 
@@ -1159,7 +1160,7 @@ int circleRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Uint8 r,
 */
 int arcColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return arcRGBA(renderer, x, y, rad, start, end, c[0], c[1], c[2], c[3]);
 }
 
@@ -1250,7 +1251,7 @@ int arcRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 star
 
 		if (oct == startoct) {
 			/* need to compute stopval_start for this octant.  Look at picture above if this is unclear */
-			dstart = (double)start;
+			dstart = static_cast<double>(start);
 			switch (oct) 
 			{
 			case 0:
@@ -1271,7 +1272,7 @@ int arcRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 star
 				break;
 			}
 			temp *= rad;
-			stopval_start = (int)temp;
+			stopval_start = static_cast<int>(temp);
 
 			/*
 			This isn't arbitrary, but requires graph paper to explain well.
@@ -1284,7 +1285,7 @@ int arcRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 star
 		}
 		if (oct == endoct) {
 			/* need to compute stopval_end for this octant */
-			dend = (double)end;
+			dend = static_cast<double>(end);
 			switch (oct)
 			{
 			case 0:
@@ -1305,7 +1306,7 @@ int arcRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 star
 				break;
 			}
 			temp *= rad;
-			stopval_end = (int)temp;
+			stopval_end = static_cast<int>(temp);
 
 			/* and whether to draw in this octant initially */
 			if (startoct == endoct)	{
@@ -1417,7 +1418,7 @@ int arcRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 star
 */
 int aacircleColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return aaellipseRGBA(renderer, x, y, rad, rad, c[0], c[1], c[2], c[3]);
 }
 
@@ -1458,7 +1459,7 @@ int aacircleRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Uint8 
 */
 int filledCircleColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return filledEllipseRGBA(renderer, x, y, rad, rad, c[0], c[1], c[2], c[3]);
 }
 
@@ -1497,7 +1498,7 @@ int filledCircleRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Ui
 */
 int ellipseColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return ellipseRGBA(renderer, x, y, rx, ry, c[0], c[1], c[2], c[3]);
 }
 
@@ -1713,7 +1714,7 @@ __declspec(naked) long int
 */
 int aaellipseColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return aaellipseRGBA(renderer, x, y, rx, ry, c[0], c[1], c[2], c[3]);
 }
 
@@ -1774,9 +1775,9 @@ int aaellipseRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16
 	xc2 = 2 * x;
 	yc2 = 2 * y;
 
-	sab = sqrt((double)(a2 + b2));
-	od = (Sint16)lrint(sab*0.01) + 1; /* introduce some overdraw */
-	dxt = (Sint16)lrint((double)a2 / sab) + od;
+	sab = sqrt(static_cast<double>(a2 + b2));
+	od = static_cast<Sint16>(lrint(sab*0.01) + 1); /* introduce some overdraw */
+	dxt = static_cast<Sint16>(lrint(static_cast<double>(a2) / sab) + od);
 
 	t = 0;
 	s = -2 * a2 * ry;
@@ -1821,7 +1822,7 @@ int aaellipseRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16
 
 		/* Calculate alpha */
 		if (s != 0) {
-			cp = (float) abs(d) / (float) abs(s);
+			cp = static_cast<float>(abs(d)) / static_cast<float>(abs(s));
 			if (cp > 1.0) {
 				cp = 1.0;
 			}
@@ -1830,7 +1831,7 @@ int aaellipseRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16
 		}
 
 		/* Calculate weights */
-		weight = (Uint8) (cp * 255);
+		weight = static_cast<Uint8>(cp * 255);
 		iweight = 255 - weight;
 
 		/* Upper half */
@@ -1852,7 +1853,7 @@ int aaellipseRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16
 	}
 
 	/* Replaces original approximation code dyt = abs(yp - yc); */
-	dyt = (Sint16)lrint((double)b2 / sab ) + od;    
+	dyt = static_cast<Sint16>(lrint(static_cast<double>(b2) / sab)) + od;
 
 	for (i = 1; i <= dyt; i++) {
 		yp++;
@@ -1880,7 +1881,7 @@ int aaellipseRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16
 
 		/* Calculate alpha */
 		if (t != 0) {
-			cp = (float) abs(d) / (float) abs(t);
+			cp = static_cast<float>(abs(d)) / static_cast<float>(abs(t));
 			if (cp > 1.0) {
 				cp = 1.0;
 			}
@@ -1889,7 +1890,7 @@ int aaellipseRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16
 		}
 
 		/* Calculate weight */
-		weight = (Uint8) (cp * 255);
+		weight = static_cast<Uint8>(cp * 255);
 		iweight = 255 - weight;
 
 		/* Left half */
@@ -1929,7 +1930,7 @@ int aaellipseRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16
 */
 int filledEllipseColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return filledEllipseRGBA(renderer, x, y, rx, ry, c[0], c[1], c[2], c[3]);
 }
 
@@ -2127,10 +2128,10 @@ static int _pieRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sin
 	/*
 	* Variable setup 
 	*/
-	dr = (double) rad;
+	dr = static_cast<double>(rad);
 	deltaAngle = 3.0 / dr;
-	start_angle = (double) start *(2.0 * M_PI / 360.0);
-	end_angle = (double) end *(2.0 * M_PI / 360.0);
+	start_angle = static_cast<double>(start *(2.0 * M_PI / 360.0));
+	end_angle = static_cast<double>(end *(2.0 * M_PI / 360.0));
 	if (start > end) {
 		end_angle += (2.0 * M_PI);
 	}
@@ -2146,7 +2147,7 @@ static int _pieRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sin
 	}
 
 	/* Allocate combined vertex array */
-	vx = vy = (Sint16 *) malloc(2 * sizeof(Sint16) * numpoints);
+	vx = vy = static_cast<Sint16 *>(malloc(2 * sizeof(Sint16) * numpoints));
 	if (vx == nullptr) {
 		return -1;
 	}
@@ -2160,8 +2161,8 @@ static int _pieRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sin
 
 	/* First vertex */
 	angle = start_angle;
-	vx[1] = x + (int) (dr * cos(angle));
-	vy[1] = y + (int) (dr * sin(angle));
+	vx[1] = x + static_cast<int>(dr * cos(angle));
+	vy[1] = y + static_cast<int>(dr * sin(angle));
 
 	if (numpoints<3)
 	{
@@ -2178,8 +2179,8 @@ static int _pieRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sin
 			{
 				angle = end_angle;
 			}
-			vx[i] = x + (int) (dr * cos(angle));
-			vy[i] = y + (int) (dr * sin(angle));
+			vx[i] = x + static_cast<int>(dr * cos(angle));
+			vy[i] = y + static_cast<int>(dr * sin(angle));
 			i++;
 		}
 
@@ -2213,7 +2214,7 @@ static int _pieRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sin
 int pieColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, 
 	Sint16 start, Sint16 end, Uint32 color) 
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return _pieRGBA(renderer, x, y, rad, start, end, c[0], c[1], c[2], c[3], 0);
 }
 
@@ -2254,7 +2255,7 @@ int pieRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad,
 */
 int filledPieColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return _pieRGBA(renderer, x, y, rad, start, end, c[0], c[1], c[2], c[3], 1);
 }
 
@@ -2495,7 +2496,7 @@ int filledTrigonRGBA(SDL_Renderer * renderer, Sint16 x1, Sint16 y1, Sint16 x2, S
 */
 int polygonColor(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, int n, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return polygonRGBA(renderer, vx, vy, n, c[0], c[1], c[2], c[3]);
 }
 
@@ -2539,7 +2540,7 @@ static int polygon(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy
 	* Create array of points
 	*/
 	nn = n + 1;
-	points = (SDL_Point*)malloc(sizeof(SDL_Point) * nn);
+	points = static_cast<SDL_Point*>(malloc(sizeof(SDL_Point) * nn));
 	if (points == nullptr)
 	{
 		return -1;
@@ -2629,7 +2630,7 @@ int polygonRGBA(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, i
 */
 int aapolygonColor(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, int n, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return aapolygonRGBA(renderer, vx, vy, n, c[0], c[1], c[2], c[3]);
 }
 
@@ -2707,7 +2708,7 @@ int aapolygonRGBA(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy,
 */
 static int _gfxPrimitivesCompareInt(const void *a, const void *b)
 {
-	return *(const int *) a - *(const int *) b;
+	return *static_cast<const int *>(a) - *static_cast<const int *>(b);
 }
 
 /*!
@@ -2790,11 +2791,11 @@ static int filledPolygonRGBAMT(SDL_Renderer * renderer, const Sint16 * vx, const
 	* Allocate temp array, only grow array 
 	*/
 	if (!gfxPrimitivesPolyAllocated) {
-		gfxPrimitivesPolyInts = (int *) malloc(sizeof(int) * n);
+		gfxPrimitivesPolyInts = static_cast<int *>(malloc(sizeof(int) * n));
 		gfxPrimitivesPolyAllocated = n;
 	} else {
 		if (gfxPrimitivesPolyAllocated < n) {
-			gfxPrimitivesPolyIntsNew = (int *) realloc(gfxPrimitivesPolyInts, sizeof(int) * n);
+			gfxPrimitivesPolyIntsNew = static_cast<int *>(realloc(gfxPrimitivesPolyInts, sizeof(int) * n));
 			if (!gfxPrimitivesPolyIntsNew) {
 				if (!gfxPrimitivesPolyInts) {
 					free(gfxPrimitivesPolyInts);
@@ -2912,7 +2913,7 @@ static int filledPolygonRGBAMT(SDL_Renderer * renderer, const Sint16 * vx, const
 */
 int filledPolygonColor(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, int n, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return filledPolygonRGBAMT(renderer, vx, vy, n, c[0], c[1], c[2], c[3], nullptr, nullptr);
 }
 
@@ -3091,11 +3092,11 @@ static int texturedPolygonMT(SDL_Renderer *renderer, const Sint16 * vx, const Si
 	* Allocate temp array, only grow array 
 	*/
 	if (!gfxPrimitivesPolyAllocated) {
-		gfxPrimitivesPolyInts = (int *) malloc(sizeof(int) * n);
+		gfxPrimitivesPolyInts = static_cast<int *>(malloc(sizeof(int) * n));
 		gfxPrimitivesPolyAllocated = n;
 	} else {
 		if (gfxPrimitivesPolyAllocated < n) {
-			gfxPrimitivesPolyIntsTemp = (int *) realloc(gfxPrimitivesPolyInts, sizeof(int) * n);
+			gfxPrimitivesPolyIntsTemp = static_cast<int *>(realloc(gfxPrimitivesPolyInts, sizeof(int) * n));
 			if (gfxPrimitivesPolyIntsTemp == nullptr) {
 				/* Realloc failed - keeps original memory block, but fails this operation */
 				return-1;
@@ -3298,7 +3299,7 @@ void gfxPrimitivesSetFont(const void *fontdata, Uint32 cw, Uint32 ch)
 	int i;
 
 	if ((fontdata) && (cw) && (ch)) {
-		currentFontdata = (const unsigned char *)fontdata;
+		currentFontdata = static_cast<const unsigned char *>(fontdata);
 		charWidth = cw;
 		charHeight = ch;
 	} else {
@@ -3438,7 +3439,7 @@ int characterRGBA(SDL_Renderer *renderer, Sint16 x, Sint16 y, char c, Uint8 r, U
 	drect.h = charHeightLocal * charZoomY;
 
 	/* Character index in cache */
-	ci = (unsigned char) c;
+	ci = static_cast<unsigned char>(c);
 
 	/*
 	* Create new charWidth x charHeight bitmap surface if not already present.
@@ -3456,7 +3457,7 @@ int characterRGBA(SDL_Renderer *renderer, Sint16 x, Sint16 y, char c, Uint8 r, U
 		}
 
 		charpos = currentFontdata + ci * charSize;
-				linepos = (Uint8 *)character->pixels;
+        linepos = static_cast<Uint8 *>(character->pixels);
 		pitch = character->pitch;
 
 		/*
@@ -3472,9 +3473,9 @@ int characterRGBA(SDL_Renderer *renderer, Sint16 x, Sint16 y, char c, Uint8 r, U
 					mask = 0x80;
 				}
 				if (patt & mask) {
-					*(Uint32 *)curpos = 0xffffffff;
+                    *std::bit_cast<Uint32 *>(curpos) = 0xffffffff;
 				} else {
-					*(Uint32 *)curpos = 0;
+                    *std::bit_cast<Uint32 *>(curpos) = 0;
 				}
 				curpos += 4;
 			}
@@ -3484,8 +3485,10 @@ int characterRGBA(SDL_Renderer *renderer, Sint16 x, Sint16 y, char c, Uint8 r, U
 		/* Maybe zoom character */
 		if ((charZoomX != 1) || (charZoomY != 1))
 		{
-			zoomedCharacter = zoomSurface(character, (double)charZoomX, 
-                                                          (double)charZoomY, SMOOTHING_OFF);
+			zoomedCharacter = zoomSurface(character,
+                                          static_cast<double>(charZoomX),
+                                          static_cast<double>(charZoomY),
+                                          SMOOTHING_OFF);
 			SDL_FreeSurface(character);
 			character = zoomedCharacter;
 		}
@@ -3539,7 +3542,7 @@ int characterRGBA(SDL_Renderer *renderer, Sint16 x, Sint16 y, char c, Uint8 r, U
 */
 int characterColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, char c, Uint32 color)
 {
-	Uint8 *co = (Uint8 *)&color; 
+	Uint8 *co = std::bit_cast<Uint8*>(&color);
 	return characterRGBA(renderer, x, y, c, co[0], co[1], co[2], co[3]);
 }
 
@@ -3560,7 +3563,7 @@ of the character width of the current global font.
 */
 int stringColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, const char *s, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return stringRGBA(renderer, x, y, s, c[0], c[1], c[2], c[3]);
 }
 
@@ -3629,18 +3632,18 @@ double _evaluateBezier (double *data, int ndata, double t)
 	if (t<0.0) {
 		return(data[0]);
 	}
-	if (t>=(double)ndata) {
+	if (t>=static_cast<double>(ndata)) {
 		return(data[ndata-1]);
 	}
 
 	/* Adjust t to the range 0.0 to 1.0 */ 
-	mu=t/(double)ndata;
+	mu=t/static_cast<double>(ndata);
 
 	/* Calculate interpolate */
 	n=ndata-1;
 	result=0.0;
 	muk = 1;
-	munk = pow(1-mu,(double)n);
+	munk = pow(1-mu, static_cast<double>(n));
 	for (k=0;k<=n;k++) {
 		nn = n;
 		kn = k;
@@ -3652,11 +3655,11 @@ double _evaluateBezier (double *data, int ndata, double t)
 			blend *= nn;
 			nn--;
 			if (kn > 1) {
-				blend /= (double)kn;
+				blend /= static_cast<double>(kn);
 				kn--;
 			}
 			if (nkn > 1) {
-				blend /= (double)nkn;
+				blend /= static_cast<double>(nkn);
 				nkn--;
 			}
 		}
@@ -3680,7 +3683,7 @@ double _evaluateBezier (double *data, int ndata, double t)
 */
 int bezierColor(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, int n, int s, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return bezierRGBA(renderer, vx, vy, n, s, c[0], c[1], c[2], c[3]);
 }
 
@@ -3719,22 +3722,22 @@ int bezierRGBA(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, in
 	/*
 	* Variable setup 
 	*/
-	stepsize=(double)1.0/(double)s;
+	stepsize = 1.0 / static_cast<double>(s);
 
 	/* Transfer vertices into float arrays */
-	if ((x=(double *)malloc(sizeof(double)*(n+1)))==nullptr) {
+	if ((x=static_cast<double *>(malloc(sizeof(double)*(n+1))))==nullptr) {
 		return-1;
 	}
-	if ((y=(double *)malloc(sizeof(double)*(n+1)))==nullptr) {
+	if ((y=static_cast<double *>(malloc(sizeof(double)*(n+1))))==nullptr) {
 		free(x);
 		return-1;
 	}    
 	for (i=0; i<n; i++) {
-		x[i]=(double)vx[i];
-		y[i]=(double)vy[i];
+		x[i] = static_cast<double>(vx[i]);
+		y[i] = static_cast<double>(vy[i]);
 	}      
-	x[n]=(double)vx[0];
-	y[n]=(double)vy[0];
+	x[n] = static_cast<double>(vx[0]);
+	y[n] = static_cast<double>(vy[0]);
 
 	/*
 	* Set color 
@@ -3747,12 +3750,12 @@ int bezierRGBA(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, in
 	* Draw 
 	*/
 	t=0.0;
-	x1=(Sint16)lrint(_evaluateBezier(x,n+1,t));
-	y1=(Sint16)lrint(_evaluateBezier(y,n+1,t));
+	x1=static_cast<Sint16>(lrint(_evaluateBezier(x,n+1,t)));
+	y1=static_cast<Sint16>(lrint(_evaluateBezier(y,n+1,t)));
 	for (i = 0; i <= (n*s); i++) {
 		t += stepsize;
-		x2=(Sint16)_evaluateBezier(x,n,t);
-		y2=(Sint16)_evaluateBezier(y,n,t);
+		x2=static_cast<Sint16>(_evaluateBezier(x,n,t));
+		y2=static_cast<Sint16>(_evaluateBezier(y,n,t));
 		result |= line(renderer, x1, y1, x2, y2);
 		x1 = x2;
 		y1 = y2;
@@ -3830,7 +3833,7 @@ static int _bresenhamInitialize(SDL2_gfxBresenhamIterator *b, Sint16 x1, Sint16 
 		b->swapdir = 0;
 	}
 
-	b->count = (b->dx<0) ? 0 : (unsigned int)b->dx;
+	b->count = (b->dx<0) ? 0 : static_cast<unsigned int>(b->dx);
 	b->dy <<= 1;
 	b->error = b->dy - b->dx;
 	b->dx <<= 1;	
@@ -4169,7 +4172,7 @@ static int LineStyle = -1;
 */
 int thickLineColor(SDL_Renderer *renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 width, Uint32 color)
 {	
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	LineStyle = -1;
 	return thickLineRGBA(renderer, x1, y1, x2, y2, width, c[0], c[1], c[2], c[3]);
 }
@@ -4177,7 +4180,7 @@ int thickLineColor(SDL_Renderer *renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint
 static int thickLineColorStyle(SDL_Renderer *renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2,
                         Uint8 width, Uint32 color, int style)
 {	
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	LineStyle = style;
 	return thickLineRGBA(renderer, x1, y1, x2, y2, width, c[0], c[1], c[2], c[3]);
 }
@@ -4226,7 +4229,7 @@ int thickLineRGBA(SDL_Renderer *renderer, Sint16 x1, Sint16 y1, Sint16 x2, Sint1
 	/* 
 	* Draw
 	*/
-	draw_varthick_line(renderer, LineStyle, x1, y1, x2, y2, (double) width);
+	draw_varthick_line(renderer, LineStyle, x1, y1, x2, y2, static_cast<double>(width));
 	return result;
 }
 
@@ -4242,7 +4245,7 @@ static int RedefineChar(SDL_Renderer *renderer, char c, unsigned char *charpos, 
 	Uint32 ci;
 
 	/* Character index in cache */
-	ci = (unsigned char) c;
+	ci = static_cast<unsigned char>(c);
 
 	if (gfxPrimitivesFont[ci] != nullptr)
 		SDL_DestroyTexture (gfxPrimitivesFont[ci]);
@@ -4253,7 +4256,7 @@ static int RedefineChar(SDL_Renderer *renderer, char c, unsigned char *charpos, 
 	if (character == nullptr)
 		return -1;
 
-	linepos = (Uint8 *)character->pixels;
+	linepos = static_cast<Uint8 *>(character->pixels);
 	pitch = character->pitch;
 
 	// Drawing loop 
@@ -4271,11 +4274,11 @@ static int RedefineChar(SDL_Renderer *renderer, char c, unsigned char *charpos, 
 			}
 			if (patt & mask)
 			{
-				*(Uint32 *)curpos = 0xffffffff;
+				*std::bit_cast<Uint32 *>(curpos) = 0xffffffff;
 			}
 			else
 			{
-				*(Uint32 *)curpos = 0;
+				*std::bit_cast<Uint32 *>(curpos) = 0;
 			}
 			curpos += 4;
 		}
@@ -4285,8 +4288,10 @@ static int RedefineChar(SDL_Renderer *renderer, char c, unsigned char *charpos, 
 	/* Maybe zoom character */
 	if ((charZoomX != 1) || (charZoomY != 1))
 	{
-		zoomedCharacter = zoomSurface(character, (double)charZoomX, 
-                                                          (double)charZoomY, SMOOTHING_OFF);
+		zoomedCharacter = zoomSurface(character,
+                                      static_cast<double>(charZoomX),
+                                      static_cast<double>(charZoomY),
+                                      SMOOTHING_OFF);
 		SDL_FreeSurface(character);
 		character = zoomedCharacter;
 	}
@@ -4318,7 +4323,7 @@ static int renderdrawline(SDL_Renderer *renderer, int x1, int y1, int x2, int y2
 	    {
 		int x;
 		if (x1 > x2) { x = x1; x1 = x2; x2 = x; }
-		SDL_Point *points = (SDL_Point*) malloc ((x2 - x1 + 1) * sizeof(SDL_Point));
+		SDL_Point *points = static_cast<SDL_Point*>(malloc((x2 - x1 + 1) * sizeof(SDL_Point)));
 		if (points == nullptr) return -1;
 		for (x = x1; x <= x2; x++)
 		    {
@@ -4332,7 +4337,7 @@ static int renderdrawline(SDL_Renderer *renderer, int x1, int y1, int x2, int y2
 	    {
 		int y;
 		if (y1 > y2) { y = y1; y1 = y2; y2 = y; }
-		SDL_Point *points = (SDL_Point*) malloc ((y2 - y1 + 1) * sizeof(SDL_Point));
+		SDL_Point *points = static_cast<SDL_Point*>(malloc((y2 - y1 + 1) * sizeof(SDL_Point)));
 		if (points == nullptr) return -1;
 		for (y = y1; y <= y2; y++)
 		    {
@@ -4495,8 +4500,8 @@ int thickArcRGBA(SDL_Renderer * renderer, Sint16 xc, Sint16 yc, Sint16 rad, Sint
 	while (start >= 180) start -= 360;
 	while (end < -180) end += 360;
 	while (end >= 180) end -= 360;
-	s = M_PI * (double)start / 180.0;
-	f = M_PI * (double)end / 180.0;
+	s = M_PI * static_cast<double>(start) / 180.0;
+	f = M_PI * static_cast<double>(end) / 180.0;
 	if (start == end) return 0;
 
 	ri = rad - thick / 2;
@@ -4538,21 +4543,21 @@ int thickCircleRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Uin
 // returns Returns 0 on success, -1 on failure.
 int thickEllipseColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint32 color, Uint8 thick)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return thickEllipseRGBA(renderer, x, y, rx, ry, c[0], c[1], c[2], c[3], thick);
 }
 
 // returns Returns 0 on success, -1 on failure.
 int thickArcColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 start, Sint16 end, Uint32 color, Uint8 thick)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return thickArcRGBA(renderer, x, y, rad, start, end, c[0], c[1], c[2], c[3], thick);
 }
 
 // returns Returns 0 on success, -1 on failure.
 int thickCircleColor(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Uint32 color, Uint8 thick)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return thickEllipseRGBA(renderer, x, y, rad, rad, c[0], c[1], c[2], c[3], thick);
 }
 
@@ -4584,22 +4589,22 @@ int filledPolyBezierRGBA(SDL_Renderer * renderer, const Sint16 *x, const Sint16 
 		return -1;
 
 	/* Transfer vertices into float arrays */
-	if ((dx=(double *)malloc(sizeof(double)*n))==nullptr) {
+	if ((dx=static_cast<double *>(malloc(sizeof(double)*n)))==nullptr) {
 		return-1;
 	}
-	if ((dy=(double *)malloc(sizeof(double)*n))==nullptr) {
+	if ((dy=static_cast<double *>(malloc(sizeof(double)*n)))==nullptr) {
 		free(dx);
 		return-1;
 	}    
 	for (i=0; i<n; i++) {
-		dx[i]=(double)x[i];
-		dy[i]=(double)y[i];
+		dx[i] = static_cast<double>(x[i]);
+		dy[i] = static_cast<double>(y[i]);
 	}      
 
 	// Create combined vertex array:
 	nbeziers = (n - 1) / 3;
 	nverts = nbeziers * 4 * s + 1;
-	vx = (Sint16 *) malloc (nverts * 2 * sizeof(Sint16));
+	vx = static_cast<Sint16 *>(malloc(nverts * 2 * sizeof(Sint16)));
 	if (vx == nullptr)
 	{
 		free(dy);
@@ -4609,7 +4614,7 @@ int filledPolyBezierRGBA(SDL_Renderer * renderer, const Sint16 *x, const Sint16 
 	vy = vx + nverts;
 
 	// Draw Beziers
-	stepsize = 1.0 / (double)s;
+	stepsize = 1.0 / static_cast<double>(s);
 	for (j = 0; j < nbeziers; j++)
 	    {
 		t = 0.0;
@@ -4644,7 +4649,7 @@ int filledPolyBezierRGBA(SDL_Renderer * renderer, const Sint16 *x, const Sint16 
 // returns Returns 0 on success, -1 on failure.
 int filledPolyBezierColor(SDL_Renderer * renderer, const Sint16 *x, const Sint16 *y, int n, int s, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return filledPolyBezierRGBA(renderer, x, y, n, s, c[0], c[1], c[2], c[3]);
 }
 
@@ -4706,7 +4711,7 @@ int aaFilledEllipseRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, f
 				v = (sqrt(v) - 2 * (dx + dy)) / 4;
 				if (v < 0) break;
 				if (v > 1.0) v = 1.0;
-				result |= SDL_SetRenderDrawColor (renderer, r, g, b, (double)a * v);
+				result |= SDL_SetRenderDrawColor (renderer, r, g, b, static_cast<double>(a) * v);
 				result |= SDL_RenderDrawPoint (renderer, xi, yi);
 				xi -= 1;
 			    }
@@ -4719,7 +4724,7 @@ int aaFilledEllipseRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, f
 				v = (sqrt(v) - 2 * (dx + dy)) / 4;
 				if (v < 0) break;
 				if (v > 1.0) v = 1.0;
-				result |= SDL_SetRenderDrawColor (renderer, r, g, b, (double)a * v);
+				result |= SDL_SetRenderDrawColor (renderer, r, g, b, static_cast<double>(a) * v);
 				result |= SDL_RenderDrawPoint (renderer, xi, yi);
 				xi += 1;
 			    }
@@ -4757,7 +4762,7 @@ int aaFilledEllipseRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, f
 				v = (sqrt(v) - 2 * (dy + dx)) / 4;
 				if (v < 0) break;
 				if (v > 1.0) v = 1.0;
-				result |= SDL_SetRenderDrawColor (renderer, r, g, b, (double)a * v);
+				result |= SDL_SetRenderDrawColor (renderer, r, g, b, static_cast<double>(a) * v);
 				result |= SDL_RenderDrawPoint (renderer, xi, yi);
 				yi -= 1;
 			    }
@@ -4770,7 +4775,7 @@ int aaFilledEllipseRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, f
 				v = (sqrt(v) - 2 * (dy + dx)) / 4;
 				if (v < 0) break;
 				if (v > 1.0) v = 1.0;
-				result |= SDL_SetRenderDrawColor (renderer, r, g, b, (double)a * v);
+				result |= SDL_SetRenderDrawColor (renderer, r, g, b, static_cast<double>(a) * v);
 				result |= SDL_RenderDrawPoint (renderer, xi, yi);
 				yi += 1;
 			    }
@@ -4782,15 +4787,15 @@ int aaFilledEllipseRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, f
 // returns Returns 0 on success, -1 on failure.
 int aaFilledEllipseColor(SDL_Renderer * renderer, float cx, float cy, float rx, float ry, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return aaFilledEllipseRGBA(renderer, cx, cy, rx, ry, c[0], c[1], c[2], c[3]);
 }
 
 static int _gfxPrimitivesCompareFloat2(const void *a, const void *b)
 {
-	float diff = *((const float *)a + 1) - *((const float *)b + 1);
+	float diff = *(static_cast<const float *>(a) + 1) - *(static_cast<const float *>(b) + 1);
 	if (diff != 0.0) return (diff > 0) - (diff < 0);
-	diff = *(const float *)a - *(const float *)b;
+	diff = *static_cast<const float *>(a) - *static_cast<const float *>(b);
 	return (diff > 0) - (diff < 0);
 }
 
@@ -4840,7 +4845,7 @@ int aaFilledPolygonRGBA(SDL_Renderer * renderer, const double * vx, const double
 	prec = floor (pow(2,19) / prec);
 
 	// Allocate main array, this determines the maximum polygon size and complexity:
-	list = (float *) malloc (POLYSIZE * sizeof(float));
+	list = static_cast<float *>(malloc (POLYSIZE * sizeof(float)));
 	if (list == nullptr)
 		return -2;
 
@@ -4949,7 +4954,7 @@ int aaFilledPolygonRGBA(SDL_Renderer * renderer, const double * vx, const double
 	qsort (list, yi / 2, sizeof(float) * 2, _gfxPrimitivesCompareFloat2);
 
 	// Plot lines:
-	strip = (float *) malloc ((maxx - minx + 2) * sizeof(float));
+	strip = static_cast<float *>(malloc ((maxx - minx + 2) * sizeof(float)));
 	if (strip == nullptr)
 	    {
 		free (list);
@@ -5025,7 +5030,7 @@ int aaFilledPolygonRGBA(SDL_Renderer * renderer, const double * vx, const double
 // returns Returns 0 on success, -1 on failure.
 int aaFilledPolygonColor(SDL_Renderer * renderer, const double * vx, const double * vy, int n, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return aaFilledPolygonRGBA(renderer, vx, vy, n, c[0], c[1], c[2], c[3]);
 }
 
@@ -5071,7 +5076,7 @@ int aaFilledPieRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, float
 		nverts = 180;
 
 	// Allocate combined vertex array 
-	vx = vy = (double *) malloc(2 * sizeof(double) * (nverts + 1));
+	vx = vy = static_cast<double *>(malloc(2 * sizeof(double) * (nverts + 1)));
 	if (vx == nullptr)
 		return -1;
 
@@ -5081,7 +5086,7 @@ int aaFilledPieRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, float
 	// Calculate vertices:
 	for (i = 0; i < nverts; i++)
 	    {
-		double angle = start + (end - start) * (double) i / (double) (nverts - 1); 
+		double angle = start + (end - start) * static_cast<double>(i) / static_cast<double>(nverts - 1);
 		vx[i] = cx + rx * cos(angle);
 		vy[i] = cy + ry * sin(angle);
 	    }
@@ -5101,7 +5106,7 @@ int aaFilledPieRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, float
 // returns Returns 0 on success, -1 on failure.
 int aaFilledPieColor(SDL_Renderer * renderer, float cx, float cy, float rx, float ry, float start, float end, Uint32 chord, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return aaFilledPieRGBA(renderer, cx, cy, rx, ry, start, end, chord, c[0], c[1], c[2], c[3]);
 }
 
@@ -5147,7 +5152,7 @@ int aaArcRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, float ry,
 		nverts = 360;
 
 	// Allocate combined vertex array 
-	vx = vy = (double *) malloc(2 * sizeof(double) * nverts);
+	vx = vy = static_cast<double *>(malloc(2 * sizeof(double) * nverts));
 	if (vx == nullptr)
 		return -1;
 
@@ -5157,7 +5162,7 @@ int aaArcRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, float ry,
 	// Calculate vertices:
 	for (i = 0; i < nverts / 2; i++)
 	    {
-		double angle = start + (end - start) * (double) i / (double) (nverts / 2 - 1); 
+		double angle = start + (end - start) * static_cast<double>(i) / static_cast<double>(nverts / 2 - 1);
 		vx[i] = cx + (rx + thick/2) * cos(angle);
 		vy[i] = cy + (ry + thick/2) * sin(angle);
 		vx[nverts - 1 - i] = cx + (rx - thick/2) * cos(angle);
@@ -5176,7 +5181,7 @@ int aaArcRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, float ry,
 // returns Returns 0 on success, -1 on failure.
 int aaArcColor(SDL_Renderer * renderer, float cx, float cy, float rx, float ry, float start, float end, float thick, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return aaArcRGBA(renderer, cx, cy, rx, ry, start, end, thick, c[0], c[1], c[2], c[3]);
 }
 
@@ -5209,14 +5214,14 @@ int aaBezierRGBA(SDL_Renderer * renderer, double *x, double *y, int n, int s, fl
 
 	// Create combined vertex array:
 	nverts = n * s * 2 + 2;
-	vx = (double *) malloc (nverts * 2 * sizeof(double));
+	vx = static_cast<double *>(malloc (nverts * 2 * sizeof(double)));
 	if (vx == nullptr)
 		return -1;
 	vy = vx + nverts;
 
 	// Draw Bezier
 	t = 0.0;
-	stepsize = 1.0 / (double)s;
+	stepsize = 1.0 / static_cast<double>(s);
 	x1 = _evaluateBezier(x, n, t);
 	y1 = _evaluateBezier(y, n, t);
 	for (i = 0; i < n*s; i++)
@@ -5254,7 +5259,7 @@ int aaBezierRGBA(SDL_Renderer * renderer, double *x, double *y, int n, int s, fl
 // returns Returns 0 on success, -1 on failure.
 int aaBezierColor(SDL_Renderer * renderer, double *x, double *y, int n, int s, float thick, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8*>(&color);
 	return aaBezierRGBA(renderer, x, y, n, s, thick, c[0], c[1], c[2], c[3]);
 }
 
@@ -5287,13 +5292,13 @@ int aaFilledPolyBezierRGBA(SDL_Renderer * renderer, double *x, double *y, int n,
 	// Create combined vertex array:
 	nbeziers = (n - 1) / 3;
 	nverts = nbeziers * 4 * s + 1;
-	vx = (double *) malloc (nverts * 2 * sizeof(double));
+	vx = static_cast<double *>(malloc (nverts * 2 * sizeof(double)));
 	if (vx == nullptr)
 		return -1;
 	vy = vx + nverts;
 
 	// Draw Beziers
-	stepsize = 1.0 / (double)s;
+	stepsize = 1.0 / static_cast<double>(s);
 	for (j = 0; j < nbeziers; j++)
 	    {
 		t = 0.0;
@@ -5325,6 +5330,6 @@ int aaFilledPolyBezierRGBA(SDL_Renderer * renderer, double *x, double *y, int n,
 // returns Returns 0 on success, -1 on failure.
 int aaFilledPolyBezierColor(SDL_Renderer * renderer, double *x, double *y, int n, int s, Uint32 color)
 {
-	Uint8 *c = (Uint8 *)&color; 
+	Uint8 *c = std::bit_cast<Uint8 *>(&color);
 	return aaFilledPolyBezierRGBA(renderer, x, y, n, s, c[0], c[1], c[2], c[3]);
 }

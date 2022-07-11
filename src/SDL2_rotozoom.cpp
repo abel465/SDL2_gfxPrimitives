@@ -31,8 +31,9 @@ Andreas Schiffler -- aschiffler at ferzkopp dot net
 #include <windows.h>
 #endif
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
+#include <bit>
 
 #include "SDL2_rotozoom.hpp"
 
@@ -41,19 +42,19 @@ Andreas Schiffler -- aschiffler at ferzkopp dot net
 /*!
 \brief A 32 bit RGBA pixel.
 */
-typedef struct tColorRGBA {
+struct tColorRGBA {
 	Uint8 r;
 	Uint8 g;
 	Uint8 b;
 	Uint8 a;
-} tColorRGBA;
+};
 
 /*!
 \brief A 8bit Y/palette pixel.
 */
-typedef struct tColorY {
+struct tColorY {
 	Uint8 y;
-} tColorY;
+};
 
 /*! 
 \brief Returns maximum of two numbers a and b.
@@ -120,9 +121,8 @@ static int _shrinkSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int factorx,
 	/*
 	* Scan destination
 	*/
-	sp = (tColorRGBA *) src->pixels;
-	
-	dp = (tColorRGBA *) dst->pixels;
+	sp = static_cast<tColorRGBA *>(src->pixels);
+	dp = static_cast<tColorRGBA *>(dst->pixels);
 	dgap = dst->pitch - dst->w * 4;
 
 	for (y = 0; y < dst->h; y++) {
@@ -143,12 +143,12 @@ static int _shrinkSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int factorx,
 					sp++;
 				} 
 				/* src dx loop */
-				sp = (tColorRGBA *)((Uint8*)sp + (src->pitch - 4*factorx)); // next y
+				sp = std::bit_cast<tColorRGBA*>(std::bit_cast<Uint8*>(sp) + (src->pitch - 4*factorx)); // next y
 			}
 			/* src dy loop */
 
 			/* next box-x */
-			sp = (tColorRGBA *)((Uint8*)oosp + 4*factorx);
+			sp = std::bit_cast<tColorRGBA*>(std::bit_cast<Uint8*>(oosp) + 4*factorx);
 
 			/* Store result in destination */
 			dp->r = ra/n_average;
@@ -164,12 +164,12 @@ static int _shrinkSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int factorx,
 		/* dst x loop */
 
 		/* next box-y */
-		sp = (tColorRGBA *)((Uint8*)osp + src->pitch*factory);
+		sp = std::bit_cast<tColorRGBA*>(std::bit_cast<Uint8*>(osp) + src->pitch*factory);
 
 		/*
 		* Advance destination pointers 
 		*/
-		dp = (tColorRGBA *) ((Uint8 *) dp + dgap);
+		dp = std::bit_cast<tColorRGBA*>(std::bit_cast<Uint8*>(dp) + dgap);
 	} 
 	/* dst y loop */
 
@@ -208,9 +208,8 @@ static int _shrinkSurfaceY(SDL_Surface * src, SDL_Surface * dst, int factorx, in
 	/*
 	* Scan destination
 	*/
-	sp = (Uint8 *) src->pixels;
-
-	dp = (Uint8 *) dst->pixels;
+	sp = static_cast<Uint8 *>(src->pixels);
+	dp = static_cast<Uint8 *>(dst->pixels);
 	dgap = dst->pitch - dst->w;
 
 	for (y = 0; y < dst->h; y++) {    
@@ -229,12 +228,12 @@ static int _shrinkSurfaceY(SDL_Surface * src, SDL_Surface * dst, int factorx, in
 				} 
 				/* end src dx loop */         
 				/* next y */
-				sp = (Uint8 *)((Uint8*)sp + (src->pitch - factorx)); 
+				sp = static_cast<Uint8 *>(sp + (src->pitch - factorx));
 			} 
 			/* end src dy loop */
 
 			/* next box-x */
-			sp = (Uint8 *)((Uint8*)oosp + factorx);
+			sp = static_cast<Uint8 *>(oosp + factorx);
 
 			/* Store result in destination */
 			*dp = a/n_average;
@@ -247,12 +246,12 @@ static int _shrinkSurfaceY(SDL_Surface * src, SDL_Surface * dst, int factorx, in
 		/* end dst x loop */
 
 		/* next box-y */
-		sp = (Uint8 *)((Uint8*)osp + src->pitch*factory);
+		sp = static_cast<Uint8 *>(osp + src->pitch*factory);
 
 		/*
 		* Advance destination pointers 
 		*/
-		dp = (Uint8 *)((Uint8 *)dp + dgap);
+		dp = static_cast<Uint8 *>(dp + dgap);
 	} 
 	/* end dst y loop */
 
@@ -284,10 +283,10 @@ static int _zoomSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int flipx, int
 	/*
 	* Allocate memory for row/column increments 
 	*/
-	if ((sax = (int *) malloc((dst->w + 1) * sizeof(int))) == nullptr) {
+	if ((sax = static_cast<int *>(malloc((dst->w + 1) * sizeof(int)))) == nullptr) {
 		return -1;
 	}
-	if ((say = (int *) malloc((dst->h + 1) * sizeof(int))) == nullptr) {
+	if ((say = static_cast<int *>(malloc((dst->h + 1) * sizeof(int)))) == nullptr) {
 		free(sax);
 		return -1;
 	}
@@ -298,11 +297,11 @@ static int _zoomSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int flipx, int
 	spixelw = (src->w - 1);
 	spixelh = (src->h - 1);
 	if (smooth) {
-		sx = (int) (65536.0 * (float) spixelw / (float) (dst->w - 1));
-		sy = (int) (65536.0 * (float) spixelh / (float) (dst->h - 1));
+		sx = static_cast<int>(65536.0 * static_cast<float>(spixelw) / static_cast<float>(dst->w - 1));
+		sy = static_cast<int>(65536.0 * static_cast<float>(spixelh) / static_cast<float>(dst->h - 1));
 	} else {
-		sx = (int) (65536.0 * (float) (src->w) / (float) (dst->w));
-		sy = (int) (65536.0 * (float) (src->h) / (float) (dst->h));
+		sx = static_cast<int>(65536.0 * static_cast<float>(src->w) / static_cast<float>(dst->w));
+		sy = static_cast<int>(65536.0 * static_cast<float>(src->h) / static_cast<float>(dst->h));
 	}
 
 	/* Maximum scaled source size */
@@ -337,8 +336,8 @@ static int _zoomSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int flipx, int
 		}
 	}
 
-	sp = (tColorRGBA *) src->pixels;
-	dp = (tColorRGBA *) dst->pixels;
+	sp = static_cast<tColorRGBA *>(src->pixels);
+	dp = static_cast<tColorRGBA *>(dst->pixels);
 	dgap = dst->pitch - dst->w * 4;
 	spixelgap = src->pitch/4;
 
@@ -436,7 +435,7 @@ static int _zoomSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int flipx, int
 			/*
 			* Advance destination pointer y
 			*/
-			dp = (tColorRGBA *) ((Uint8 *) dp + dgap);
+			dp = std::bit_cast<tColorRGBA *>(std::bit_cast<Uint8 *>(dp) + dgap);
 		}
 	} else {
 		/*
@@ -479,7 +478,7 @@ static int _zoomSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int flipx, int
 			/*
 			* Advance destination pointer y
 			*/
-			dp = (tColorRGBA *) ((Uint8 *) dp + dgap);
+			dp = std::bit_cast<tColorRGBA *>(std::bit_cast<Uint8 *>(dp) + dgap);
 		}
 	}
 
@@ -518,10 +517,10 @@ static int _zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fl
 	/*
 	* Allocate memory for row increments 
 	*/
-	if ((sax = (Uint32 *) malloc((dst->w + 1) * sizeof(Uint32))) == nullptr) {
+	if ((sax = static_cast<Uint32 *>(malloc((dst->w + 1) * sizeof(Uint32)))) == nullptr) {
 		return -1;
 	}
-	if ((say = (Uint32 *) malloc((dst->h + 1) * sizeof(Uint32))) == nullptr) {
+	if ((say = static_cast<Uint32 *>(malloc((dst->h + 1) * sizeof(Uint32)))) == nullptr) {
 		free(sax);
 		return -1;
 	}
@@ -529,12 +528,12 @@ static int _zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fl
 	/*
 	* Pointer setup 
 	*/
-	dp = (Uint8 *) dst->pixels;
+	dp = static_cast<Uint8 *>(dst->pixels);
 	dgap = dst->pitch - dst->w;
 
-	csp = (Uint8 *) src->pixels;
+	csp = static_cast<Uint8 *>(src->pixels);
 	if (flipx) csp += (src->w-1);
-	if (flipy) csp  = ( (Uint8*)csp + src->pitch*(src->h-1) );
+	if (flipy) csp  = (static_cast<Uint8*>(csp) + src->pitch*(src->h-1));
 
 	/*
 	* Precalculate row increments 
@@ -642,7 +641,7 @@ static void _transformSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int cx, 
 	ay = (cy << 16) - (isin * cx);
 	sw = src->w - 1;
 	sh = src->h - 1;
-	pc = (tColorRGBA*) dst->pixels;
+	pc = static_cast<tColorRGBA*>(dst->pixels);
 	gap = dst->pitch - dst->w * 4;
 
 	/*
@@ -659,7 +658,7 @@ static void _transformSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int cx, 
 				if (flipx) dx = sw - dx;
 				if (flipy) dy = sh - dy;
 				if ((dx > -1) && (dy > -1) && (dx < (src->w-1)) && (dy < (src->h-1))) {
-					sp = (tColorRGBA *)src->pixels;
+					sp = static_cast<tColorRGBA *>(src->pixels);
 					sp += ((src->pitch/4) * dy);
 					sp += dx;
 					c00 = *sp;
@@ -699,7 +698,7 @@ static void _transformSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int cx, 
 				sdy += isin;
 				pc++;
 			}
-			pc = (tColorRGBA *) ((Uint8 *) pc + gap);
+			pc = std::bit_cast<tColorRGBA *>(std::bit_cast<Uint8 *>(pc) + gap);
 		}
 	} else {
 		for (y = 0; y < dst->h; y++) {
@@ -707,12 +706,12 @@ static void _transformSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int cx, 
 			sdx = (ax + (isin * dy)) + xd;
 			sdy = (ay - (icos * dy)) + yd;
 			for (x = 0; x < dst->w; x++) {
-				dx = (short) (sdx >> 16);
-				dy = (short) (sdy >> 16);
+				dx = static_cast<short>(sdx >> 16);
+				dy = static_cast<short>(sdy >> 16);
 				if (flipx) dx = (src->w-1)-dx;
 				if (flipy) dy = (src->h-1)-dy;
 				if ((dx >= 0) && (dy >= 0) && (dx < src->w) && (dy < src->h)) {
-					sp = (tColorRGBA *) ((Uint8 *) src->pixels + src->pitch * dy);
+					sp = std::bit_cast<tColorRGBA *>(static_cast<Uint8 *>(src->pixels) + src->pitch * dy);
 					sp += dx;
 					*pc = *sp;
 				}
@@ -720,7 +719,7 @@ static void _transformSurfaceRGBA(SDL_Surface * src, SDL_Surface * dst, int cx, 
 				sdy += isin;
 				pc++;
 			}
-			pc = (tColorRGBA *) ((Uint8 *) pc + gap);
+			pc = std::bit_cast<tColorRGBA *>(std::bit_cast<Uint8 *>(pc) + gap);
 		}
 	}
 }
@@ -756,12 +755,12 @@ static void transformSurfaceY(SDL_Surface * src, SDL_Surface * dst, int cx, int 
 	yd = ((src->h - dst->h) << 15);
 	ax = (cx << 16) - (icos * cx);
 	ay = (cy << 16) - (isin * cx);
-	pc = (tColorY*) dst->pixels;
+	pc = static_cast<tColorY*>(dst->pixels);
 	gap = dst->pitch - dst->w;
 	/*
 	* Clear surface to colorkey 
 	*/ 	
-	memset(pc, (int)(_colorkey(src) & 0xff), dst->pitch * dst->h);
+	memset(pc, static_cast<int>(_colorkey(src) & 0xff), dst->pitch * dst->h);
 	/*
 	* Iterate through destination surface 
 	*/
@@ -770,12 +769,12 @@ static void transformSurfaceY(SDL_Surface * src, SDL_Surface * dst, int cx, int 
 		sdx = (ax + (isin * dy)) + xd;
 		sdy = (ay - (icos * dy)) + yd;
 		for (x = 0; x < dst->w; x++) {
-			dx = (short) (sdx >> 16);
-			dy = (short) (sdy >> 16);
+			dx = static_cast<short>(sdx >> 16);
+			dy = static_cast<short>(sdy >> 16);
 			if (flipx) dx = (src->w-1)-dx;
 			if (flipy) dy = (src->h-1)-dy;
 			if ((dx >= 0) && (dy >= 0) && (dx < src->w) && (dy < src->h)) {
-				sp = (tColorY *) (src->pixels);
+				sp = static_cast<tColorY *>(src->pixels);
 				sp += (src->pitch * dy + dx);
 				*pc = *sp;
 			}
@@ -869,8 +868,8 @@ SDL_Surface* rotateSurface90Degrees(SDL_Surface* src, int numClockwiseTurns)
 			else
 			{
 				/* If the pitch differs, copy each row separately */
-				srcBuf = (Uint8*)(src->pixels);
-				dstBuf = (Uint8*)(dst->pixels);
+				srcBuf = static_cast<Uint8*>(src->pixels);
+				dstBuf = static_cast<Uint8*>(dst->pixels);
 				bpr = src->w * bpp;
 				for (row = 0; row < src->h; row++) {
 					memcpy(dstBuf, srcBuf, bpr);
@@ -885,8 +884,8 @@ SDL_Surface* rotateSurface90Degrees(SDL_Surface* src, int numClockwiseTurns)
 	case 1: /* rotated 90 degrees clockwise */
 		{
 			for (row = 0; row < src->h; ++row) {
-				srcBuf = (Uint8*)(src->pixels) + (row * src->pitch);
-				dstBuf = (Uint8*)(dst->pixels) + (dst->w - row - 1) * bpp;
+				srcBuf = static_cast<Uint8*>(src->pixels) + (row * src->pitch);
+				dstBuf = static_cast<Uint8*>(dst->pixels) + (dst->w - row - 1) * bpp;
 				for (col = 0; col < src->w; ++col) {
 					memcpy (dstBuf, srcBuf, bpp);
 					srcBuf += bpp;
@@ -899,8 +898,8 @@ SDL_Surface* rotateSurface90Degrees(SDL_Surface* src, int numClockwiseTurns)
 	case 2: /* rotated 180 degrees clockwise */
 		{
 			for (row = 0; row < src->h; ++row) {
-				srcBuf = (Uint8*)(src->pixels) + (row * src->pitch);
-				dstBuf = (Uint8*)(dst->pixels) + ((dst->h - row - 1) * dst->pitch) + (dst->w - 1) * bpp;
+				srcBuf = static_cast<Uint8*>(src->pixels) + (row * src->pitch);
+				dstBuf = static_cast<Uint8*>(dst->pixels) + ((dst->h - row - 1) * dst->pitch) + (dst->w - 1) * bpp;
 				for (col = 0; col < src->w; ++col) {
 					memcpy (dstBuf, srcBuf, bpp);
 					srcBuf += bpp;
@@ -913,8 +912,8 @@ SDL_Surface* rotateSurface90Degrees(SDL_Surface* src, int numClockwiseTurns)
 	case 3: /* rotated 270 degrees clockwise */
 		{
 			for (row = 0; row < src->h; ++row) {
-				srcBuf = (Uint8*)(src->pixels) + (row * src->pitch);
-				dstBuf = (Uint8*)(dst->pixels) + (row * bpp) + (dst->h * dst->pitch);
+				srcBuf = static_cast<Uint8*>(src->pixels) + (row * src->pitch);
+				dstBuf = static_cast<Uint8*>(dst->pixels) + (row * bpp) + (dst->h * dst->pitch);
 				for (col = 0; col < src->w; ++col) {
 					memcpy (dstBuf, srcBuf, bpp);
 					srcBuf += bpp;
@@ -967,17 +966,15 @@ static void _rotozoomSurfaceSizeTrig(int width, int height, double angle, double
 	*canglezoom = cos(radangle);
 	*sanglezoom *= zoomx;
 	*canglezoom *= zoomx;
-	x = (double)(width / 2);
-	y = (double)(height / 2);
+	x = static_cast<double>(width / 2);
+	y = static_cast<double>(height / 2);
 	cx = *canglezoom * x;
 	cy = *canglezoom * y;
 	sx = *sanglezoom * x;
 	sy = *sanglezoom * y;
 
-	dstwidthhalf = MAX((int)
-		ceil(MAX(MAX(MAX(fabs(cx + sy), fabs(cx - sy)), fabs(-cx + sy)), fabs(-cx - sy))), 1);
-	dstheighthalf = MAX((int)
-		ceil(MAX(MAX(MAX(fabs(sx + cy), fabs(sx - cy)), fabs(-sx + cy)), fabs(-sx - cy))), 1);
+	dstwidthhalf = MAX(static_cast<int>(ceil(MAX(MAX(MAX(fabs(cx + sy), fabs(cx - sy)), fabs(-cx + sy)), fabs(-cx - sy)))), 1);
+	dstheighthalf = MAX(static_cast<int>(ceil(MAX(MAX(MAX(fabs(sx + cy), fabs(sx - cy)), fabs(-sx + cy)), fabs(-sx - cy)))), 1);
 	*dstwidth = 2 * dstwidthhalf;
 	*dstheight = 2 * dstheighthalf;
 }
@@ -1179,9 +1176,8 @@ SDL_Surface *rotozoomSurfaceXY(SDL_Surface * src, double angle, double zoomx, do
 			* Call the 32bit transformation routine to do the rotation (using alpha) 
 			*/
 			_transformSurfaceRGBA(rz_src, rz_dst, dstwidthhalf, dstheighthalf,
-				(int) (sanglezoominv), (int) (canglezoominv), 
-				flipx, flipy,
-				smooth);
+                                  static_cast<int>(sanglezoominv), static_cast<int>(canglezoominv),
+                                  flipx, flipy, smooth);
 		} else {
 			/*
 			* Copy palette and colorkey info 
@@ -1194,8 +1190,8 @@ SDL_Surface *rotozoomSurfaceXY(SDL_Surface * src, double angle, double zoomx, do
 			* Call the 8bit transformation routine to do the rotation 
 			*/
 			transformSurfaceY(rz_src, rz_dst, dstwidthhalf, dstheighthalf,
-				(int) (sanglezoominv), (int) (canglezoominv),
-				flipx, flipy);
+                              static_cast<int>(sanglezoominv), static_cast<int>(canglezoominv),
+                              flipx, flipy);
 		}
 		/*
 		* Unlock source surface 
@@ -1332,8 +1328,8 @@ void zoomSurfaceSize(int width, int height, double zoomx, double zoomy, int *dst
 	/*
 	* Calculate target size 
 	*/
-	*dstwidth = (int) floor(((double) width * zoomx) + 0.5);
-	*dstheight = (int) floor(((double) height * zoomy) + 0.5);
+	*dstwidth = static_cast<int>(floor((static_cast<double>(width) * zoomx) + 0.5));
+	*dstheight = static_cast<int>(floor((static_cast<double>(height) * zoomy) + 0.5));
 	if (*dstwidth < 1) {
 		*dstwidth = 1;
 	}
