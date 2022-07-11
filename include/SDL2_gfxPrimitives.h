@@ -234,6 +234,9 @@ SDL2_GFXPRIMITIVES_SCOPE int aaBezierRGBA(SDL_Renderer * renderer, double *x, do
 SDL2_GFXPRIMITIVES_SCOPE int aaFilledPolyBezierColor(SDL_Renderer * renderer, double *x, double *y, int n, int s, Uint32 color);
 SDL2_GFXPRIMITIVES_SCOPE int aaFilledPolyBezierRGBA(SDL_Renderer * renderer, double *x, double *y, int n, int s, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
+// Abel Svoboda's additions
+SDL2_GFXPRIMITIVES_SCOPE int aaFilledStadiumRGBA(SDL_Renderer* renderer, double cx1, double cy1, double cx2, double cy2, double rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+
 // Ends C function definitions when using C++
 #ifdef __cplusplus
 }
