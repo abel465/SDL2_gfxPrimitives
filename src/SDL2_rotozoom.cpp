@@ -36,8 +36,11 @@ Abel Svoboda -- abel465 at gmail dot com
 #include <cstdlib>
 #include <cstring>
 #include <bit>
+#include <numbers>
 
 #include "SDL2_rotozoom.hpp"
+
+using std::numbers::pi;
 
 /* ---- Internally used structures */
 
@@ -976,7 +979,7 @@ static void _rotozoomSurfaceSizeTrig(int width, int height, double angle, double
 	/*
 	* Determine destination width and height by rotating a centered source box 
 	*/
-	radangle = angle * (M_PI / 180.0);
+	radangle = angle * (pi / 180.0);
 	*sanglezoom = std::sin(radangle);
 	*canglezoom = std::cos(radangle);
 	*sanglezoom *= zoomx;

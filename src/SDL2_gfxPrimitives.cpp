@@ -36,10 +36,13 @@ Abel Svoboda -- abel465 at gmail dot com
 #include <cmath>
 #include <cstring>
 #include <bit>
+#include <numbers>
 
 #include "SDL2_gfxPrimitives.hpp"
 #include "SDL2_rotozoom.hpp"
 #include "SDL2_gfxPrimitives_font.hpp"
+
+using std::numbers::pi;
 
 /* ---- Structures */
 
@@ -1258,19 +1261,19 @@ int arcRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 star
 			{
 			case 0:
 			case 3:
-				temp = std::sin(dstart * M_PI / 180.);
+				temp = std::sin(dstart * pi / 180.);
 				break;
 			case 1:
 			case 6:
-				temp = std::cos(dstart * M_PI / 180.);
+				temp = std::cos(dstart * pi / 180.);
 				break;
 			case 2:
 			case 5:
-				temp = -std::cos(dstart * M_PI / 180.);
+				temp = -std::cos(dstart * pi / 180.);
 				break;
 			case 4:
 			case 7:
-				temp = -std::sin(dstart * M_PI / 180.);
+				temp = -std::sin(dstart * pi / 180.);
 				break;
 			}
 			temp *= rad;
@@ -1292,19 +1295,19 @@ int arcRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sint16 star
 			{
 			case 0:
 			case 3:
-				temp = std::sin(dend * M_PI / 180);
+				temp = std::sin(dend * pi / 180);
 				break;
 			case 1:
 			case 6:
-				temp = std::cos(dend * M_PI / 180);
+				temp = std::cos(dend * pi / 180);
 				break;
 			case 2:
 			case 5:
-				temp = -std::cos(dend * M_PI / 180);
+				temp = -std::cos(dend * pi / 180);
 				break;
 			case 4:
 			case 7:
-				temp = -std::sin(dend * M_PI / 180);
+				temp = -std::sin(dend * pi / 180);
 				break;
 			}
 			temp *= rad;
@@ -2132,10 +2135,10 @@ static int _pieRGBA(SDL_Renderer * renderer, Sint16 x, Sint16 y, Sint16 rad, Sin
 	*/
 	dr = static_cast<double>(rad);
 	deltaAngle = 3.0 / dr;
-	start_angle = static_cast<double>(start *(2.0 * M_PI / 360.0));
-	end_angle = static_cast<double>(end *(2.0 * M_PI / 360.0));
+	start_angle = static_cast<double>(start *(2.0 * pi / 360.0));
+	end_angle = static_cast<double>(end *(2.0 * pi / 360.0));
 	if (start > end) {
-		end_angle += (2.0 * M_PI);
+		end_angle += (2.0 * pi);
 	}
 
 	/* We will always have at least 2 points */
@@ -4502,8 +4505,8 @@ int thickArcRGBA(SDL_Renderer * renderer, Sint16 xc, Sint16 yc, Sint16 rad, Sint
 	while (start >= 180) start -= 360;
 	while (end < -180) end += 360;
 	while (end >= 180) end -= 360;
-	s = M_PI * static_cast<double>(start) / 180.0;
-	f = M_PI * static_cast<double>(end) / 180.0;
+	s = pi * static_cast<double>(start) / 180.0;
+	f = pi * static_cast<double>(end) / 180.0;
 	if (start == end) return 0;
 
 	ri = rad - thick / 2;
@@ -5065,13 +5068,13 @@ int aaFilledPieRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, float
 		return -1;
 
 	// Convert degrees to radians
-	start = std::fmod(start, 360.0) * 2.0 * M_PI / 360.0;
-	end = std::fmod(end, 360.0) * 2.0 * M_PI / 360.0;
+	start = std::fmod(start, 360.0) * 2.0 * pi / 360.0;
+	end = std::fmod(end, 360.0) * 2.0 * pi / 360.0;
 	while (start >= end)
-		end += 2.0 * M_PI;
+		end += 2.0 * pi;
 
 	// Calculate number of vertices on perimeter
-	nverts = (end - start) * std::sqrt(rx * ry) / M_PI;
+	nverts = (end - start) * std::sqrt(rx * ry) / pi;
 	if (nverts < 2)
 		nverts = 2;
 	if (nverts > 180)
@@ -5141,13 +5144,13 @@ int aaArcRGBA(SDL_Renderer * renderer, float cx, float cy, float rx, float ry,
 		return -1;
 
 	// Convert degrees to radians
-	start = std::fmod(start, 360.0) * 2.0 * M_PI / 360.0;
-	end = std::fmod(end, 360.0) * 2.0 * M_PI / 360.0;
+	start = std::fmod(start, 360.0) * 2.0 * pi / 360.0;
+	end = std::fmod(end, 360.0) * 2.0 * pi / 360.0;
 	while (start >= end)
-		end += 2.0 * M_PI;
+		end += 2.0 * pi;
 
 	// Calculate number of vertices
-	nverts = 2 * std::floor((end - start) * std::sqrt(rx * ry) / M_PI);
+	nverts = 2 * std::floor((end - start) * std::sqrt(rx * ry) / pi);
 	if (nverts < 2)
 		nverts = 2;
 	if (nverts > 360)
