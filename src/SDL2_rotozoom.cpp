@@ -58,10 +58,23 @@ struct tColorY {
 	Uint8 y;
 };
 
-/*! 
-\brief Returns maximum of two numbers a and b.
-*/
-#define MAX(a,b)    (((a) > (b)) ? (a) : (b))
+///*!
+//\brief Returns the given value. Base case.
+//*/
+template <typename T>
+constexpr T maxn(T&& v) {
+    return std::forward<T>(v);
+}
+
+///*!
+//\brief Returns maximum of n values.
+//*/
+template <typename T0, typename T1, typename... Ts>
+constexpr std::common_type_t<T0, T1, Ts...> maxn(T0&& v0, T1&& v1, Ts&&... vs) noexcept {
+    return v0 > v1
+           ? maxn(std::forward<T0>(v0), std::forward<Ts>(vs)...)
+           : maxn(std::forward<T1>(v1), std::forward<Ts>(vs)...);
+}
 
 /*! 
 \brief Number of guard rows added to destination surfaces.
@@ -975,8 +988,20 @@ static void _rotozoomSurfaceSizeTrig(int width, int height, double angle, double
 	sx = *sanglezoom * x;
 	sy = *sanglezoom * y;
 
-	dstwidthhalf = MAX(static_cast<int>(std::ceil(MAX(MAX(MAX(std::fabs(cx + sy), std::fabs(cx - sy)), std::fabs(-cx + sy)), std::fabs(-cx - sy)))), 1);
-	dstheighthalf = MAX(static_cast<int>(std::ceil(MAX(MAX(MAX(std::fabs(sx + cy), std::fabs(sx - cy)), std::fabs(-sx + cy)), std::fabs(-sx - cy)))), 1);
+    dstwidthhalf = maxn(1,
+            static_cast<int>(std::ceil(maxn(
+                    std::fabs(cx + sy),
+                    std::fabs(cx - sy),
+                    std::fabs(-cx + sy),
+                    std::fabs(-cx - sy))))
+            );
+    dstheighthalf = maxn(1,
+            static_cast<int>(std::ceil(maxn(
+                    std::fabs(sx + cy),
+                    std::fabs(sx - cy),
+                    std::fabs(-sx + cy),
+                    std::fabs(-sx - cy))))
+            );
 	*dstwidth = 2 * dstwidthhalf;
 	*dstheight = 2 * dstheighthalf;
 }
