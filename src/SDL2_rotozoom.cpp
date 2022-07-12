@@ -33,6 +33,7 @@ Abel Svoboda -- abel465 at gmail dot com
 #include <windows.h>
 #endif
 
+#include <cstring>
 #include <bit>
 #include <numbers>
 
@@ -60,7 +61,7 @@ struct tColorY {
 };
 
 /*!
-\brief Returns the given value. Base case.
+\brief Returns the maximum of the given values. Base case.
 */
 template <typename T>
 constexpr T maxn(T&& v) {
@@ -776,7 +777,7 @@ static void transformSurfaceY(SDL_Surface * src, SDL_Surface * dst, int cx, int 
 	/*
 	* Clear surface to colorkey 
 	*/ 	
-	memset(pc, static_cast<int>(_colorkey(src) & 0xff), dst->pitch * dst->h);
+	std::memset(pc, static_cast<int>(_colorkey(src) & 0xff), dst->pitch * dst->h);
 	/*
 	* Iterate through destination surface 
 	*/
@@ -879,7 +880,7 @@ SDL_Surface* rotateSurface90Degrees(SDL_Surface* src, int numClockwiseTurns)
 
 			if (src->pitch == dst->pitch) {
 				/* If the pitch is the same for both surfaces, the memory can be copied all at once. */
-				memcpy(dst->pixels, src->pixels, (src->h * src->pitch));
+				std::memcpy(dst->pixels, src->pixels, (src->h * src->pitch));
 			}
 			else
 			{
@@ -888,7 +889,7 @@ SDL_Surface* rotateSurface90Degrees(SDL_Surface* src, int numClockwiseTurns)
 				dstBuf = static_cast<Uint8*>(dst->pixels);
 				bpr = src->w * bpp;
 				for (row = 0; row < src->h; row++) {
-					memcpy(dstBuf, srcBuf, bpr);
+					std::memcpy(dstBuf, srcBuf, bpr);
 					srcBuf += src->pitch;
 					dstBuf += dst->pitch;
 				}
@@ -903,7 +904,7 @@ SDL_Surface* rotateSurface90Degrees(SDL_Surface* src, int numClockwiseTurns)
 				srcBuf = static_cast<Uint8*>(src->pixels) + (row * src->pitch);
 				dstBuf = static_cast<Uint8*>(dst->pixels) + (dst->w - row - 1) * bpp;
 				for (col = 0; col < src->w; ++col) {
-					memcpy (dstBuf, srcBuf, bpp);
+					std::memcpy(dstBuf, srcBuf, bpp);
 					srcBuf += bpp;
 					dstBuf += dst->pitch;
 				} 
@@ -917,7 +918,7 @@ SDL_Surface* rotateSurface90Degrees(SDL_Surface* src, int numClockwiseTurns)
 				srcBuf = static_cast<Uint8*>(src->pixels) + (row * src->pitch);
 				dstBuf = static_cast<Uint8*>(dst->pixels) + ((dst->h - row - 1) * dst->pitch) + (dst->w - 1) * bpp;
 				for (col = 0; col < src->w; ++col) {
-					memcpy (dstBuf, srcBuf, bpp);
+					std::memcpy(dstBuf, srcBuf, bpp);
 					srcBuf += bpp;
 					dstBuf -= bpp;
 				} 
@@ -931,7 +932,7 @@ SDL_Surface* rotateSurface90Degrees(SDL_Surface* src, int numClockwiseTurns)
 				srcBuf = static_cast<Uint8*>(src->pixels) + (row * src->pitch);
 				dstBuf = static_cast<Uint8*>(dst->pixels) + (row * bpp) + (dst->h * dst->pitch);
 				for (col = 0; col < src->w; ++col) {
-					memcpy (dstBuf, srcBuf, bpp);
+					std::memcpy(dstBuf, srcBuf, bpp);
 					srcBuf += bpp;
 					dstBuf -= dst->pitch;
 				} 

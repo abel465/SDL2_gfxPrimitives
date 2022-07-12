@@ -31,6 +31,7 @@ Abel Svoboda -- abel465 at gmail dot com
 
 */
 
+#include <cstring>
 #include <bit>
 #include <numbers>
 #include <algorithm>
@@ -2883,7 +2884,7 @@ static int filledPolygonRGBAMT(SDL_Renderer * renderer, const Sint16 * vx, const
 			} 	    
 		}
 
-		qsort(gfxPrimitivesPolyInts, ints, sizeof(int), _gfxPrimitivesCompareInt);
+		std::qsort(gfxPrimitivesPolyInts, ints, sizeof(int), _gfxPrimitivesCompareInt);
 
 		/*
 		* Set color 
@@ -3195,7 +3196,7 @@ static int texturedPolygonMT(SDL_Renderer *renderer, const Sint16 * vx, const Si
 			} 
 		}
 
-		qsort(gfxPrimitivesPolyInts, ints, sizeof(int), _gfxPrimitivesCompareInt);
+		std::qsort(gfxPrimitivesPolyInts, ints, sizeof(int), _gfxPrimitivesCompareInt);
 
 		for (i = 0; (i < ints); i += 2) {
 			xa = gfxPrimitivesPolyInts[i] + 1;
@@ -4892,7 +4893,7 @@ int aaFilledPolygonRGBA(SDL_Renderer * renderer, const double * vx, const double
 	xi = yi;
 
 	// Sort vertex list:
-	qsort (list, yi / 2, sizeof(float) * 2, _gfxPrimitivesCompareFloat2);
+	std::qsort(list, yi / 2, sizeof(float) * 2, _gfxPrimitivesCompareFloat2);
 
 	// Append line list to vertex list:
 	for (i = 1; i <= n; i++)
@@ -4955,7 +4956,7 @@ int aaFilledPolygonRGBA(SDL_Renderer * renderer, const double * vx, const double
 	    }
 
 	// Sort combined list:
-	qsort (list, yi / 2, sizeof(float) * 2, _gfxPrimitivesCompareFloat2);
+	std::qsort(list, yi / 2, sizeof(float) * 2, _gfxPrimitivesCompareFloat2);
 
 	// Plot lines:
 	strip = static_cast<float *>(malloc ((maxx - minx + 2) * sizeof(float)));
@@ -4964,7 +4965,7 @@ int aaFilledPolygonRGBA(SDL_Renderer * renderer, const double * vx, const double
 		free (list);
 		return -1;
 	    }
-	memset (strip, 0, (maxx - minx + 2) * sizeof(float));
+	std::memset(strip, 0, (maxx - minx + 2) * sizeof(float));
 	n = yi;
 	yi = list[1];
 	j = 0;
@@ -5019,7 +5020,7 @@ int aaFilledPolygonRGBA(SDL_Renderer * renderer, const double * vx, const double
 					    }
 				    }
 			    }
-			memset (strip, 0, (maxx - minx + 2) * sizeof(float));
+			std::memset(strip, 0, (maxx - minx + 2) * sizeof(float));
 			yi++;
 
 		    }
