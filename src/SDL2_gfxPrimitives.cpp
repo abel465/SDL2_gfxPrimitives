@@ -5357,23 +5357,22 @@ int aaFilledPolyBezierColor(SDL_Renderer * renderer, double *x, double *y, int n
 */
 int aaFilledStadiumRGBA(SDL_Renderer* renderer, double cx1, double cy1, double cx2, double cy2, double rad,
                         Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
-    constexpr int min_semicircle_vertices = 4;
-    constexpr int max_semicircle_vertices = 360;
+    constexpr int min_semicircle_vertices{4};
+    constexpr int max_semicircle_vertices{360};
 
     if (rad <= 0) {
         return -1;
     }
 
     const auto [start1, end1, start2, end2] = ([=]() {
-        const double dx = cx2 - cx1;
-        const double dy = cy2 - cy1;
-        const double magnitude = std::sqrt(dy * dy + dx * dx);
-        const double angle = -std::atan2(-dy / magnitude, dx / magnitude);
+        const double dx{cx2 - cx1};
+        const double dy{cy2 - cy1};
+        const double angle{std::atan2(dy, dx) + pi / 2};
         return std::tuple{
-                angle + pi / 2,
-                angle + pi * 3 / 2,
-                angle - pi / 2,
-                angle + pi / 2};
+                angle,
+                angle + pi,
+                angle - pi,
+                angle};
     })();
 
     const auto clamp = [=](double start, double end) {
@@ -5382,23 +5381,25 @@ int aaFilledStadiumRGBA(SDL_Renderer* renderer, double cx1, double cy1, double c
                 min_semicircle_vertices,
                 max_semicircle_vertices);
     };
-    const int num_vertices1 = clamp(start1, end1);
-    const int num_vertices2 = clamp(start2, end2);
+
+    const auto populate_semicircle = [=]
+            (double* vx, double* vy, int num_vertices, double start, double end, double cx, double cy)
+    {
+        const double m{(end - start) / (num_vertices - 1)};
+        for (int i{0}; i < num_vertices; ++i) {
+            const double angle{start + m * i};
+            vx[i] = cx + rad * std::cos(angle);
+            vy[i] = cy + rad * std::sin(angle);
+        }
+    };
 
     std::array<double, max_semicircle_vertices * 2> vx;
     std::array<double, max_semicircle_vertices * 2> vy;
-    const auto populate_semicircle = [=, &vx, &vy]
-            (int offset, int num_vertices, double start, double end, double cx, double cy)
-    {
-        const double m = (end - start) / (num_vertices - 1);
-        for (int i{0}; i < num_vertices; i++) {
-            const double angle = start + m * i;
-            vx[i + offset] = cx + rad * std::cos(angle);
-            vy[i + offset] = cy + rad * std::sin(angle);
-        }
-    };
-    populate_semicircle(0, num_vertices1, start1, end1, cx1, cy1);
-    populate_semicircle(num_vertices1, num_vertices2, start2, end2, cx2, cy2);
+
+    const int num_vertices1{clamp(start1, end1)};
+    const int num_vertices2{clamp(start2, end2)};
+    populate_semicircle(vx.data(), vy.data(), num_vertices1, start1, end1, cx1, cy1);
+    populate_semicircle(vx.data() + num_vertices1, vy.data() + num_vertices1, num_vertices2, start2, end2, cx2, cy2);
 
     return aaFilledPolygonRGBA(renderer, vx.data(), vy.data(), num_vertices1 + num_vertices2, r, g, b, a);
 }
