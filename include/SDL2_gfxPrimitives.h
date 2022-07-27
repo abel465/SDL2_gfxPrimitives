@@ -236,6 +236,7 @@ SDL2_GFXPRIMITIVES_SCOPE int aaFilledPolyBezierRGBA(SDL_Renderer * renderer, dou
 
 // Abel Svoboda's additions
 SDL2_GFXPRIMITIVES_SCOPE int aaFilledStadiumRGBA(SDL_Renderer* renderer, double cx1, double cy1, double cx2, double cy2, double rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+SDL2_GFXPRIMITIVES_SCOPE int aaFilledRadialPolygon(SDL_Renderer * renderer, const double* cx, const double* cy, int n, double rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
 // Ends C function definitions when using C++
 #ifdef __cplusplus

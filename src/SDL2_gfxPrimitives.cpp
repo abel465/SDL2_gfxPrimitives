@@ -37,6 +37,10 @@ Abel Svoboda -- abel465 at gmail dot com
 #include <algorithm>
 #include <tuple>
 #include <array>
+#include <memory>
+#include <vector>
+
+#include "vector2.hpp"
 
 #include "SDL2_gfxPrimitives.h"
 #include "SDL2_rotozoom.h"
@@ -5402,4 +5406,76 @@ int aaFilledStadiumRGBA(SDL_Renderer* renderer, double cx1, double cy1, double c
     populate_semicircle(vx.data() + num_vertices1, vy.data() + num_vertices1, num_vertices2, start2, end2, cx2, cy2);
 
     return aaFilledPolygonRGBA(renderer, vx.data(), vy.data(), num_vertices1 + num_vertices2, r, g, b, a);
+}
+
+/*!
+\brief Draw anti-aliased filled polygon with alpha blending. The circumference of the polygon extends outward
+
+\param renderer The renderer to draw on.
+\param cx Vertex array containing X coordinates of the points of the polygon.
+\param cy Vertex array containing Y coordinates of the points of the polygon.
+\param n The number of vertices.
+\param rad Radius of the polygon circumference.
+\param r The red value of the polygon to draw.
+\param g The green value of the polygon to draw.
+\param b The blue value of the polygon to draw.
+\param a The alpha value of the polygon to draw.
+/
+\returns Returns 0 on success, -1 on failure.
+*/
+int aaFilledRadialPolygon(SDL_Renderer* renderer, const double* cx, const double* cy, int n, double rad,
+                           Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+    constexpr int min_arc_vertices{3};
+    constexpr int max_arc_vertices{360};
+
+    if (rad <= 0) {
+        return -1;
+    }
+
+    std::vector<double> vx;
+    std::vector<double> vy;
+    int total_num_vertices{0};
+
+    {
+        const auto vertexData{std::make_unique<std::tuple<double, double, int>[]>(n)};
+
+        for (int i{0}; i < n; ++i) {
+            const Vector2 A{cx, cy, (n + i - 1) % n};
+            const Vector2 B{cx, cy, i};
+            const Vector2 C{cx, cy, (i + 1) % n};
+
+            const auto startAngle{(rad * (C - B).unit_normal()).atan2()};
+            const auto endAngle{[=]() {
+                const auto angle{(rad * (B - A).unit_normal()).atan2()};
+                return angle + 2 * pi * (angle < startAngle);
+            }()};
+
+            const int num_vertices{std::clamp(
+                    static_cast<int>(std::floor((endAngle - startAngle) * rad / pi)),
+                    min_arc_vertices,
+                    max_arc_vertices)};
+            total_num_vertices += num_vertices;
+
+            vertexData[i] = {
+                    startAngle,
+                    endAngle,
+                    num_vertices
+            };
+        }
+
+        vx.reserve(total_num_vertices);
+        vy.reserve(total_num_vertices);
+
+        for (int i{0}; i < n; ++i) {
+            const auto [start, end, num_vertices]{vertexData[i]};
+            const double m{(end - start) / (num_vertices - 1)};
+            for (int j{num_vertices}; j--;) {
+                const double angle{start + m * j};
+                vx.push_back(cx[i] + rad * std::cos(angle));
+                vy.push_back(cy[i] + rad * std::sin(angle));
+            }
+        }
+    }
+
+    return aaFilledPolygonRGBA(renderer, vx.data(), vy.data(), total_num_vertices, r, g, b, a);
 }
