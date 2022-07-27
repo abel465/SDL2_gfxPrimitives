@@ -5352,10 +5352,10 @@ int aaFilledPolyBezierColor(SDL_Renderer * renderer, double *x, double *y, int n
 \param cx2 X coordinate of the center of the second semicircle.
 \param cy2 Y coordinate of the center of the second semicircle.
 \param rad Radius of the two semicircles.
-\param r The red value of the filled pie to draw.
-\param g The green value of the filled pie to draw.
-\param b The blue value of the filled pie to draw.
-\param a The alpha value of the filled pie to draw.
+\param r The red value of the stadium to draw.
+\param g The green value of the stadium to draw.
+\param b The blue value of the stadium to draw.
+\param a The alpha value of the stadium to draw.
 /
 \returns Returns 0 on success, -1 on failure.
 */
