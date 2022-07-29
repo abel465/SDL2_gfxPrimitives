@@ -5408,7 +5408,7 @@ int aaFilledStadiumRGBA(SDL_Renderer* renderer, double cx1, double cy1, double c
 \returns Returns 0 on success, -1 on failure.
 */
 int aaFilledRadialPolygon(SDL_Renderer* renderer, const double* cx, const double* cy, int n, double rad,
-                           Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+                          Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
     constexpr int min_arc_vertices{3};
     constexpr int max_arc_vertices{360};
 
@@ -5421,7 +5421,7 @@ int aaFilledRadialPolygon(SDL_Renderer* renderer, const double* cx, const double
     int total_num_vertices{0};
 
     {
-        const auto vertexData{std::make_unique<std::tuple<double, double, int>[]>(n)};
+        const auto vertexData{std::make_unique_for_overwrite<std::tuple<double, double, int>[]>(n)};
 
         for (int i{0}; i < n; ++i) {
             const Vector2 A{cx, cy, (n + i - 1) % n};
@@ -5429,20 +5429,20 @@ int aaFilledRadialPolygon(SDL_Renderer* renderer, const double* cx, const double
             const Vector2 C{cx, cy, (i + 1) % n};
 
             const auto startAngle{(rad * (C - B).unit_normal()).atan2()};
-            const auto endAngle{[=]() {
+            const auto angleSize{[=]() {
                 const auto angle{(rad * (B - A).unit_normal()).atan2()};
-                return angle + 2 * pi * (angle < startAngle);
+                return angle + 2 * pi * (angle < startAngle) - startAngle;
             }()};
 
             const int num_vertices{std::clamp(
-                    static_cast<int>(std::floor((endAngle - startAngle) * rad / pi)),
+                    static_cast<int>(angleSize * rad / pi),
                     min_arc_vertices,
                     max_arc_vertices)};
             total_num_vertices += num_vertices;
 
             vertexData[i] = {
                     startAngle,
-                    endAngle,
+                    angleSize,
                     num_vertices
             };
         }
@@ -5451,10 +5451,10 @@ int aaFilledRadialPolygon(SDL_Renderer* renderer, const double* cx, const double
         vy.reserve(total_num_vertices);
 
         for (int i{0}; i < n; ++i) {
-            const auto [start, end, num_vertices]{vertexData[i]};
-            const double m{(end - start) / (num_vertices - 1)};
+            const auto [startAngle, angleSize, num_vertices]{vertexData[i]};
+            const double m{angleSize / (num_vertices - 1)};
             for (int j{num_vertices}; j--;) {
-                const double angle{start + m * j};
+                const double angle{startAngle + m * j};
                 vx.push_back(cx[i] + rad * std::cos(angle));
                 vy.push_back(cy[i] + rad * std::sin(angle));
             }
